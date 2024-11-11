@@ -10,27 +10,20 @@ class Fraccion {
 
     public:
         
-        Fraccion(); // Constructor por defecto
+        Fraccion();
 
-        Fraccion(int num, int den); // Constructor con parametros
+        Fraccion(int num, int den);
 
-        ~Fraccion();    // Destructor 
+        ~Fraccion();
 
-        void setNumerador(int num) {
-            numerador = num;
-        }
+        void setNumerador(int num);
 
-        void setDenominador(int den) {
-            denominador = den;
-        }
+        void setDenominador(int den);
+        
 
-        int getNumerador() { 
-            return numerador;
-        }
+        int getNumerador() const;
 
-        int getDenominador() {
-            return denominador;
-        }
+        int getDenominador() const;
 };
 
-#endif // FRACCION_H
+#endif

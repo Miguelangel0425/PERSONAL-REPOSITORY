@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <numeric>
 
-Fraccion::Fraccion() : nummerador(0), denominador(1) {
+Fraccion::Fraccion() : numerador(0), denominador(1) {
 }
 
 Fraccion::Fraccion(int num, int den){
@@ -27,15 +27,15 @@ void Fraccion::setDenominador(int den) {
     simplificar();
 }
 
-int Fraccion::getNumerador() {
+int Fraccion::getNumerador() const {
     return numerador;
 }
 
-int Fraccion::getDenominador() {
+int Fraccion::getDenominador() const {
     return denominador;
 }
 
-void simplificar() {
+void Fraccion::simplificar() {
     int gcd = std::gcd(numerador, denominador); 
     numerador /= gcd;
     denominador /= gcd;
