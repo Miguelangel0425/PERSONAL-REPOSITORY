@@ -1,3 +1,13 @@
+/***********************************************************************
+ *            UNIVERSIDAD DE LAS FUERZAS ARMADAS ESPE                  *
+ * Proposito:                      Validaciones con casting            *
+ * Autor:                          Miguel Caiza                        *
+ * Fecha de creacion:              06/10/2024                          *
+ * Fecha de modificacion:          07/11/2024                          *
+ * Materia:                        Estructura de datos                 *
+ * NRC :                           1978                                *
+ ***********************************************************************/
+
 #ifndef Validacion_H
 #define Validacion_H
 
