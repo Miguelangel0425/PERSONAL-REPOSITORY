@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 template <typename T>
 Lista_Simple<T>::Lista_Simple()
 {
@@ -26,17 +25,16 @@ void Lista_Simple<T>::Insertar_cabeza(T _dato)
         cabeza = nuevo;
     }
     else {
-        Nodo<T>* aux = cabeza;
-        while (aux->getSiguiente() != NULL) {
-            aux = aux->getSiguiente();
-        }
-        aux->setSiguiente(nuevo);
+        nuevo->setSiguiente(cabeza);  
+        cabeza = nuevo;               
     }
 }
 
-/*template<typename T> 
- void Lista_Simple<T>::Insertar_cola(T _dato) {
+template<typename T> 
+void Lista_Simple<T>::Insertar_cola(T _dato) {
     Nodo<T>* nuevo = new Nodo(_dato);
+    nuevo->setSiguiente(NULL);
+    
     if (cabeza == NULL) {
         cabeza = nuevo;
     }
@@ -47,10 +45,10 @@ void Lista_Simple<T>::Insertar_cabeza(T _dato)
         }
         aux->setSiguiente(nuevo);
     }
-}*/
+}
 
 template<typename T> 
- void Lista_Simple<T>::Buscar(T _dato) {
+void Lista_Simple<T>::Buscar(T _dato) {
     Nodo<T>* aux = cabeza;
     while (aux != NULL) {
         if (aux->getDato() == _dato) {
@@ -63,7 +61,7 @@ template<typename T>
 }
 
 template<typename T> 
- void Lista_Simple<T>::Eliminar(T _dato) {
+void Lista_Simple<T>::Eliminar(T _dato) {
     Nodo<T>* aux = cabeza;
     Nodo<T>* anterior = NULL;
     while (aux != NULL) {
@@ -85,7 +83,7 @@ template<typename T>
 }
 
 template<typename T> 
- void Lista_Simple<T>::Mostrar() {
+void Lista_Simple<T>::Mostrar() {
     Nodo<T>* aux = cabeza;
     while (aux != NULL) {
         cout << aux->getDato() << " -> ";
@@ -93,3 +91,5 @@ template<typename T>
     }
     cout << "NULL" << endl;
 }
+
+template class Lista_Simple<string>;

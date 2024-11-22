@@ -20,7 +20,7 @@ private:
 public:
     Lista_Simple();
     void Insertar_cabeza(T);
-    //void Insertar_cola(T);
+    void Insertar_cola(T);
     void Buscar(T);
     void Eliminar(T);
     void Mostrar();
