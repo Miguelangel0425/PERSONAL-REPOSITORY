@@ -1,29 +1,21 @@
 #ifndef LISTA_CIRCULAR_DOBLE_H
 #define LISTA_CIRCULAR_DOBLE_H
-
+#include "Nodo.h"
 #include <iostream>
 
+template <typename T>
 class ListaCircularDoble {
-private:
-    class Nodo {
+    private:
+    Nodo<T>* primero;
+    Nodo<T>* ultimo;
     public:
-        int dato;
-        Nodo* siguiente;
-        Nodo* anterior;
-        
-        Nodo(int valor) : dato(valor), siguiente(nullptr), anterior(nullptr) {}
-    };
-    
-    Nodo* primero;
-    Nodo* ultimo;
-
-public:
     ListaCircularDoble();
-    
-    void Insertar(int dato);
-    void Buscar(int dato);
-    void Eliminar(int dato);
-    void Mostrar();
+    ~ListaCircularDoble();
+    void agregarAlFinal(T dato);
+    void agregarAlInicio(T dato);
+    void eliminar(T dato);
+    void eliminarPosicion(int posicion);
+    void mostrar();
 };
 
 #endif // LISTA_CIRCULAR_DOBLE_H

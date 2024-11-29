@@ -1,112 +1,131 @@
 #include "ListaCircularDoble.h"
-#include <iostream>
 
-ListaCircularDoble::ListaCircularDoble() : primero(nullptr), ultimo(nullptr) {}
+using namespace std;
 
-void ListaCircularDoble::Insertar(int dato) {
-    Nodo* nuevo = new Nodo(dato);
-    
-    if (primero == nullptr) {
 
-        primero = nuevo;
-        ultimo = nuevo;
-        primero->siguiente = primero;
-        primero->anterior = primero;
+template <typename T>
+ListaCircularDoble<T>::ListaCircularDoble() {
+    primero = nullptr;
+    ultimo = nullptr;
+}
+
+// Destructor
+template <typename T>
+ListaCircularDoble<T>::~ListaCircularDoble() {
+    while (primero != nullptr) {
+        eliminar(primero->dato);
+    }
+}
+
+// Agregar al final
+template <typename T>
+void ListaCircularDoble<T>::agregarAlFinal(T dato) {
+    Nodo<T>* nuevoNodo = new Nodo<T>(dato);
+    if (primero == nullptr) { // Lista vacía
+        primero = nuevoNodo;
+        ultimo = nuevoNodo;
+        nuevoNodo->siguiente = nuevoNodo;
+        nuevoNodo->anterior = nuevoNodo;
     } else {
-
-        nuevo->anterior = ultimo;
-        nuevo->siguiente = primero;
-        ultimo->siguiente = nuevo;
-        primero->anterior = nuevo;
-        ultimo = nuevo;
+        nuevoNodo->anterior = ultimo;
+        nuevoNodo->siguiente = primero;
+        ultimo->siguiente = nuevoNodo;
+        primero->anterior = nuevoNodo;
+        ultimo = nuevoNodo;
     }
 }
 
-void ListaCircularDoble::Buscar(int dato) {
-    if (primero == nullptr) {
-        std::cout << "La lista está vacía" << std::endl;
-        return;
-    }
-    
-    Nodo* actual = primero;
-    bool encontrado = false;
-    
-    do {
-        if (actual->dato == dato) {
-            std::cout << "El elemento " << dato << " ha sido encontrado en la lista" << std::endl;
-            encontrado = true;
-            break;
-        }
-        actual = actual->siguiente;
-    } while (actual != primero);
-    
-    if (!encontrado) {
-        std::cout << "El elemento " << dato << " no ha sido encontrado en la lista" << std::endl;
+// Agregar al inicio
+template <typename T>
+void ListaCircularDoble<T>::agregarAlInicio(T dato) {
+    Nodo<T>* nuevoNodo = new Nodo<T>(dato);
+    if (primero == nullptr) { // Lista vacía
+        primero = nuevoNodo;
+        ultimo = nuevoNodo;
+        nuevoNodo->siguiente = nuevoNodo;
+        nuevoNodo->anterior = nuevoNodo;
+    } else {
+        nuevoNodo->siguiente = primero;
+        nuevoNodo->anterior = ultimo;
+        ultimo->siguiente = nuevoNodo;
+        primero->anterior = nuevoNodo;
+        primero = nuevoNodo;
     }
 }
 
-void ListaCircularDoble::Eliminar(int dato) {
-    if (primero == nullptr) {
-        std::cout << "La lista está vacía" << std::endl;
-        return;
-    }
-    
-    Nodo* actual = primero;
-    bool encontrado = false;
-    
+// Eliminar un elemento
+template <typename T>
+void ListaCircularDoble<T>::eliminar(T dato) {
+    if (primero == nullptr) return; // Lista vacía
+
+    Nodo<T>* actual = primero;
     do {
         if (actual->dato == dato) {
-
-            if (primero == ultimo) {
-                delete primero;
+            if (actual == primero && actual == ultimo) { // Solo un nodo
+                delete actual;
                 primero = nullptr;
                 ultimo = nullptr;
-                encontrado = true;
-                break;
-            }
-            
-
-            if (actual == primero) {
-                primero = actual->siguiente;
-                ultimo->siguiente = primero;
-                primero->anterior = ultimo;
-            }
-
-            else if (actual == ultimo) {
-                ultimo = actual->anterior;
-                primero->anterior = ultimo;
-                ultimo->siguiente = primero;
-            }
-
-            else {
+            } else {
                 actual->anterior->siguiente = actual->siguiente;
                 actual->siguiente->anterior = actual->anterior;
+                if (actual == primero) {
+                    primero = actual->siguiente;
+                }
+                if (actual == ultimo) {
+                    ultimo = actual->anterior;
+                }
+                delete actual;
             }
-            
-            delete actual;
-            encontrado = true;
-            std::cout << "El elemento " << dato << " ha sido eliminado de la lista" << std::endl;
-            break;
+            return; // Salir tras eliminar el nodo
         }
         actual = actual->siguiente;
     } while (actual != primero);
-    
-    if (!encontrado) {
-        std::cout << "El elemento " << dato << " no ha sido encontrado en la lista" << std::endl;
-    }
 }
 
-void ListaCircularDoble::Mostrar() {
+// Eliminar por posición
+template <typename T>
+void ListaCircularDoble<T>::eliminarPosicion(int posicion) {
+    if (primero == nullptr) return; // Lista vacía
+
+    Nodo<T>* actual = primero;
+    int index = 0;
+
+    do {
+        if (index == posicion) {
+            if (actual == primero && actual == ultimo) { // Solo un nodo
+                delete actual;
+                primero = nullptr;
+                ultimo = nullptr;
+            } else {
+                actual->anterior->siguiente = actual->siguiente;
+                actual->siguiente->anterior = actual->anterior;
+                if (actual == primero) {
+                    primero = actual->siguiente;
+                }
+                if (actual == ultimo) {
+                    ultimo = actual->anterior;
+                }
+                delete actual;
+            }
+            return; // Salir tras eliminar el nodo
+        }
+        actual = actual->siguiente;
+        index++;
+    } while (actual != primero);
+}
+
+// Mostrar la lista
+template <typename T>
+void ListaCircularDoble<T>::mostrar() {
     if (primero == nullptr) {
-        std::cout << "La lista está vacía" << std::endl;
+        std::cout << "La lista está vacía." << std::endl;
         return;
     }
-    
-    Nodo* actual = primero;
+
+    Nodo<T>* actual = primero;
     do {
-        std::cout << actual->dato << " <-> ";
+        std::cout << actual->dato << " ";
         actual = actual->siguiente;
     } while (actual != primero);
-    
-    std::cout << " (ciclo)" << std::endl;
+    std::cout << std::endl;
 }
