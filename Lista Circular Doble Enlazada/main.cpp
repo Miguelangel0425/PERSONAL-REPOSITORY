@@ -1,7 +1,7 @@
 /***************************************************************************************
  *            UNIVERSIDAD DE LAS FUERZAS ARMADAS ESPE                                  *
- * Proposito:                      Programa sobre lista doble enlazada                  *
- * Autor:                          Josue Chango, Adonny Calero, Eduardo altamirano     *
+ * Proposito:                      Programa sobre lista doble enlazada                 *
+ * Autor:                          Miguel Caiza                                        *
  * Fecha de creacion:              18/11/2024                                          *
  * Fecha de modificacion:          18/11/2024                                          *
  * Materia:                        Estructura de datos                                 *
@@ -49,7 +49,7 @@ int main() {
         cout << endl;
         switch(opcion) {
             case 1:
-            do{ 
+                do{ 
                 system("cls");
                 cout << "**********Menu de Listas de Enteros**********" << endl;
                 cout << "1. Ingresar dato" << endl;
@@ -66,13 +66,223 @@ int main() {
                         lista_entero->agregarAlInicio(dato_entero);
                         cout << "Dato agregado con exito" << endl;
                         system("pause");
-                    break;
+                        break;
+                    case 2:
+                        lista_entero->mostrar();
+                        system("pause");
+                        break;
+                    case 3:
+                        dato_entero = ingresar_entero.ingresar("dato","entero");
+                        cout<<endl;
+                        lista_entero->buscar(dato_entero);
+                        system("pause");
+                        break;
+                    case 4:
+                        dato_entero = ingresar_entero.ingresar("dato","entero");
+                        cout<<endl;
+                        lista_entero->eliminar(dato_entero);
+                        cout << "Dato eliminado con exito" << endl;
+                        system("pause");
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        cout << "Opcion no valida" << endl;
+                        system("pause");
+                        break;
+                        }
+                    } while(opcion != 5);
 
+                        break;
+            case 2:
+                do{
+                system("cls");
+                cout << "**********Menu de Listas de Flotantes**********" << endl;
+                cout << "1. Ingresar dato" << endl;
+                cout << "2. Mostrar lista" << endl;
+                cout << "3. Buscar dato" << endl;
+                cout << "4. Eliminar dato" << endl;
+                cout << "5. Salir" << endl;
+                opcion = ingresar_entero.ingresar("opcion","entero");
+                cout << endl;
+                switch(opcion){
+                    case 1:
+                        dato_flotante = ingresar_flotante.ingresar("dato","flotante");
+                        cout<<endl;
+                        lista_flotantes->agregarAlInicio(dato_flotante);
+                        cout << "Dato agregado con exito" << endl;
+                        system("pause");
+                        break;
+                    case 2:
+                        lista_flotantes->mostrar();
+                        system("pause");
+                        break;
+                    case 3:
+                        dato_flotante = ingresar_flotante.ingresar("dato","flotante");
+                        cout<<endl;
+                        lista_flotantes->buscar(dato_flotante);
+                        system("pause");
+                        break;
+                    case 4:
+                        dato_flotante = ingresar_flotante.ingresar("dato","flotante");
+                        cout<<endl;
+                        lista_flotantes->eliminar(dato_flotante);
+                        cout << "Dato eliminado con exito" << endl;
+                        system("pause");
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        cout << "Opcion no valida" << endl;
+                        system("pause");
+                        break;
+                        }
+                    } while(opcion != 5);
+                        break;
+            case 3:
+                do{
+                system("cls");
+                cout << "**********Menu de Listas de Dobles**********" << endl;
+                cout << "1. Ingresar dato" << endl;
+                cout << "2. Mostrar lista" << endl;
+                cout << "3. Buscar dato" << endl;
+                cout << "4. Eliminar dato" << endl;
+                cout << "5. Salir" << endl;
+                opcion = ingresar_entero.ingresar("opcion","entero");
+                cout << endl;
+                switch(opcion){
+                    case 1:
+                        dato_doble = ingresar_doble.ingresar("dato","doble");
+                        cout<<endl;
+                        lista_doble->agregarAlInicio(dato_doble);
+                        cout << "Dato agregado con exito" << endl;
+                        system("pause");
+                        break;
+                    case 2:
+                        lista_doble->mostrar();
+                        system("pause");
+                        break;
+                    case 3:
+                        dato_doble = ingresar_doble.ingresar("dato","doble");
+                        cout<<endl;
+                        lista_doble->buscar(dato_doble);
+                        system("pause");
+                        break;
+                    case 4:
+                        dato_doble = ingresar_doble.ingresar("dato","doble");
+                        cout<<endl;
+                        lista_doble->eliminar(dato_doble);
+                        cout << "Dato eliminado con exito" << endl;
+                        system("pause");
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        cout << "Opcion no valida" << endl;
+                        system("pause");
+                        break;
+                        }
+                    } while(opcion != 5);
+                        break;
 
-            }while(opcion != 5);
-                        
-    }
-        
-    }
-}while(opcion != 6);
+            case 4:
+                    do{
+                    system("cls");
+                    cout << "**********Menu de Listas de String**********" << endl;
+                    cout << "1. Ingresar dato" << endl;
+                    cout << "2. Mostrar lista" << endl;
+                    cout << "3. Buscar dato" << endl;
+                    cout << "4. Eliminar dato" << endl;
+                    cout << "5. Salir" << endl;
+                    opcion = ingresar_entero.ingresar("opcion","entero");
+                    cout << endl;
+                    switch(opcion){
+                        case 1:
+                            dato_string = ingresar_string.ingresar("dato","string");
+                            cout<<endl;
+                            lista_string->agregarAlInicio(dato_string);
+                            cout << "Dato agregado con exito" << endl;
+                            system("pause");
+                            break;
+                        case 2:
+                            lista_string->mostrar();
+                            system("pause");
+                            break;
+                        case 3:
+                            dato_string = ingresar_string.ingresar("dato","string");
+                            cout<<endl;
+                            lista_string->buscar(dato_string);
+                            system("pause");
+                            break;
+                        case 4:
+                            dato_string = ingresar_string.ingresar("dato","string");
+                            cout<<endl;
+                            lista_string->eliminar(dato_string);
+                            cout << "Dato eliminado con exito" << endl;
+                            system("pause");
+                            break;
+                        case 5:
+                            break;
+                        default:
+                            cout << "Opcion no valida" << endl;
+                            system("pause");
+                            break;
+                            }
+                        } while(opcion != 5);
+                        break;
+            case 5:
+                    do{
+                    system("cls");
+                    cout << "**********Menu de Listas de Caracteres**********" << endl;
+                    cout << "1. Ingresar dato" << endl;
+                    cout << "2. Mostrar lista" << endl;
+                    cout << "3. Buscar dato" << endl;
+                    cout << "4. Eliminar dato" << endl;
+                    cout << "5. Salir" << endl;
+                    opcion = ingresar_entero.ingresar("opcion","entero");
+                    cout << endl;
+                    switch(opcion){
+                        case 1:
+                            dato_caracter = ingresar_caracter.ingresar("dato","caracter");
+                            cout<<endl;
+                            lista_caracter->agregarAlInicio(dato_caracter);
+                            cout << "Dato agregado con exito" << endl;
+                            system("pause");
+                            break;
+                        case 2:
+                            lista_caracter->mostrar();
+                            system("pause");
+                            break;
+                        case 3:
+                            dato_caracter = ingresar_caracter.ingresar("dato","caracter");
+                            cout<<endl;
+                            lista_caracter->buscar(dato_caracter);
+                            system("pause");
+                            break;
+                        case 4:
+                            dato_caracter = ingresar_caracter.ingresar("dato","caracter");
+                            cout<<endl;
+                            lista_caracter->eliminar(dato_caracter);
+                            cout << "Dato eliminado con exito" << endl;
+                            system("pause");
+                            break;
+                        case 5:
+                            break;
+                        default:
+                            cout << "Opcion no valida" << endl;
+                            system("pause");
+                            break;
+                            }
+                        } while(opcion != 5);
+                        break;
+            case 6: 
+                cout << "Gracias por usar el programa" << endl;
+                break;
+            default:
+                cout << "Opcion no valida" << endl;
+                system("pause");
+                break;
+        }   
+    } while(opcion != 6);
+    return 0;
 }

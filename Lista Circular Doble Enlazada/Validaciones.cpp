@@ -22,7 +22,7 @@ Validaciones<T>::Validaciones()
 }
 
 template <typename T>
-T Validaciones<T>::ingresar(char *msj, char *tipo)
+T Validaciones<T>::ingresar(const char *msj,const char *tipo)
 {
     char cad[10];
     char c;

@@ -16,6 +16,8 @@ class ListaCircularDoble {
     void eliminar(T dato);
     void eliminarPosicion(int posicion);
     void mostrar();
+    void buscar(T dato);
 };
 
+#include "ListaCircularDoble.cpp"
 #endif // LISTA_CIRCULAR_DOBLE_H

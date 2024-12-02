@@ -19,7 +19,7 @@ class Validaciones
 {
    public:
       Validaciones();
-      T ingresar(char *msj, char *tipo);
+      T ingresar(const char *msj,const char *tipo);
    protected:
    private:
       T numero;

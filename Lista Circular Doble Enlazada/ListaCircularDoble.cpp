@@ -129,3 +129,22 @@ void ListaCircularDoble<T>::mostrar() {
     } while (actual != primero);
     std::cout << std::endl;
 }
+
+// Buscar un elemento
+template <typename T>
+void ListaCircularDoble<T>::buscar(T dato) {
+    if (primero == nullptr) {
+        std::cout << "La lista está vacía." << std::endl;
+        return;
+    }
+
+    Nodo<T>* actual = primero;
+    do {
+        if (actual->dato == dato) {
+            std::cout << "El dato " << dato << " se encuentra en la lista." << std::endl;
+            return;
+        }
+        actual = actual->siguiente;
+    } while (actual != primero);
+    std::cout << "El dato " << dato << " no se encuentra en la lista." << std::endl;
+}
