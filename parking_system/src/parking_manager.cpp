@@ -1,198 +1,223 @@
 #include "../include/parking_manager.h"
-#include "../include/input_validator.h"
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <conio.h>
 #include <algorithm>
-#include <limits>
+#include <iomanip>
+#include <conio.h>
+#include <cstdlib>
+#include "parking_manager.h"
+#include "input_validator.h"
+#include "history_manager.h"
+#include "token_manager.h"
 
-ParkingManager::ParkingManager() 
-    : dataFile("parking_data.txt"), 
-      historyFile("parking_history.txt"),
-      menuOptions({"Registrar Vehículo", "Buscar Vehículo", 
-                   "Historial de Parqueo", "Salida de Vehículo", "Salir"}),
-      currentOption(0) {}
 
-void ParkingManager::clearScreen() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+ParkingManager::ParkingManager(const std::string& dataDir)
+    : dataDir(dataDir), 
+      vehiclesFile(dataDir + "vehicles.txt"),
+      userRecordsFile(dataDir + "user_records.txt"), // Archivo para registros de usuarios
+      historyFile(dataDir + "parking_history.txt"), // Archivo para el historial
+      historyManager(historyFile) { // Pasar el archivo de historial al HistoryManager
+    loadVehiclesFromFile();
 }
 
-void ParkingManager::displayMenu() {
-    clearScreen();
-    std::cout << "--- SISTEMA DE PARQUEADERO ---\n\n";
-    
-    for (size_t i = 0; i < menuOptions.size(); ++i) {
-        if (i == currentOption) {
-            std::cout << "-> " << menuOptions[i] << " <-\n";
-        } else {
-            std::cout << "   " << menuOptions[i] << "\n";
-        }
-    }
-    std::cout << "\nUse W/S para moverse, Enter para seleccionar\n";
-}
-
-void ParkingManager::handleMenuNavigation() {
-    char key;
-    while (true) {
-        displayMenu();
-        key = _getch();
-
-        switch (key) {
-            case 'w':  // Arriba
-                if (currentOption > 0) currentOption--;
-                break;
-            case 's':  // Abajo
-                if (currentOption < menuOptions.size() - 1) currentOption++;
-                break;
-            case 13:  // Enter
-                processSelectedOption();
-                return;
-        }
-    }
-}
-
-void ParkingManager::processSelectedOption() {
-    clearScreen();
-    switch (currentOption) {
-        case 0: registerVehicle(); break;
-        case 1: searchVehicleByPlate(); break;
-        case 2: showParkingHistory(); break;
-        case 3: vehicleExit(); break;
-        case 4: 
-            std::cout << "Saliendo del sistema...\n";
-            exit(0);
-    }
-    
-    std::cout << "\nPresione cualquier tecla para continuar...";
-    _getch();
-}
-
-std::string ParkingManager::getCurrentDateTime() {
-    auto now = std::chrono::system_clock::now();
-    std::time_t time = std::chrono::system_clock::to_time_t(now);
-    std::stringstream ss;
-    ss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
-    return ss.str();
-}
-
-void ParkingManager::registerVehicle() {
-    std::string plate, name, id, phone, type;
-
-    while (true) {
-        std::cout << "Ingrese placa (formato AAA000): ";
-        std::getline(std::cin, plate);
-        if (InputValidator::isValidPlate(plate)) break;
-        std::cout << "Placa inválida. Intente nuevamente.\n";
-    }
-
-    while (true) {
-        std::cout << "Ingrese nombre del propietario: ";
-        std::getline(std::cin, name);
-        if (InputValidator::isValidName(name)) break;
-        std::cout << "Nombre inválido. Solo letras son permitidas.\n";
-    }
-
-    while (true) {
-        std::cout << "Ingrese cédula (10 dígitos): ";
-        std::getline(std::cin, id);
-        if (InputValidator::isValidID(id)) break;
-        std::cout << "Cédula inválida. Debe contener 10 dígitos.\n";
-    }
-
-    while (true) {
-        std::cout << "Ingrese teléfono (10 dígitos): ";
-        std::getline(std::cin, phone);
-        if (InputValidator::isValidPhone(phone)) break;
-        std::cout << "Teléfono inválido. Debe contener 10 dígitos.\n";
-    }
-
-    std::cout << "Ingrese tipo de vehículo: ";
-    std::getline(std::cin, type);
-
-    Vehicle vehicle(plate, name, id, phone, type);
-    vehicles.push_back(vehicle);
-    saveVehicleToFile(vehicle);
-    logParkingEvent(plate, "ENTRADA");
-    std::cout << "Vehículo registrado exitosamente.\n";
-}
-
-void ParkingManager::saveVehicleToFile(const Vehicle& vehicle) {
-    std::ofstream file(dataFile, std::ios::app);
-    file << vehicle.getPlate() << ","
-         << vehicle.getOwnerName() << ","
-         << vehicle.getOwnerID() << ","
-         << vehicle.getOwnerPhone() << ","
-         << vehicle.getVehicleType() << std::endl;
-    file.close();
-}
-
-void ParkingManager::logParkingEvent(const std::string& plate, const std::string& eventType) {
-    std::ofstream file(historyFile, std::ios::app);
-    file << getCurrentDateTime() << ","
-         << plate << ","
-         << eventType << std::endl;
-    file.close();
-}
-
-void ParkingManager::searchVehicleByPlate() {
+void ParkingManager::enterVehicle() {
     std::string plate;
-    std::cout << "Ingrese placa a buscar: ";
+
+    std::cout << "Ingrese placa (AAA000): ";
     std::getline(std::cin, plate);
 
-    auto it = std::find_if(vehicles.begin(), vehicles.end(),
-        [&plate](const Vehicle& v) { return v.getPlate() == plate; });
+    // Validar la placa
+    if (!InputValidator::isValidPlate(plate)) {
+        std::cout << "Placa invalida. Intente nuevamente.\n";
+        return;
+    }
 
-    if (it != vehicles.end()) {
-        std::cout << "Placa: " << it->getPlate() << std::endl;
-        std::cout << "Propietario: " << it->getOwnerName() << std::endl;
-        std::cout << "Cédula: " << it->getOwnerID() << std::endl;
-        std::cout << "Teléfono: " << it->getOwnerPhone() << std::endl;
-        std::cout << "Tipo de vehículo: " << it->getVehicleType() << std::endl;
+    // Verificar si la placa ya está registrada
+    auto vehicle = findVehicleByPlate(plate);
+    
+    if (vehicle) {
+        // Si el vehículo ya está registrado, solo registrar la entrada
+        historyManager.logEvent(plate, "ENTRADA");
+        std::cout << "Vehículo ingresado al parqueadero.\n";
     } else {
-        std::cout << "Vehículo no encontrado.\n";
+        // Si no está registrado, solicitar datos del propietario
+        std::string name, id, phone, type;
+
+        while (true) {
+            std::cout << "Nombre del propietario: ";
+            std::getline(std::cin, name);
+            if (!InputValidator::validate(name, nameValidator)) {
+                std::cout << "Nombre invalido. Solo letras.\n";
+                continue;
+            }
+            break;
+        }
+
+        std::cout << "Ingrese su Cedula: ";
+        std::getline(std::cin, id);
+
+        std::cout << "Ingrese telefono: ";
+        std::getline(std::cin, phone);
+
+        std::cout << "Ingrese tipo de vehiculo: ";
+        std::getline(std::cin, type);
+
+        Vehicle newVehicle(plate, name, id, phone, type);
+        vehicles.push_back(newVehicle);
+        saveVehiclesToFile();
+        saveUserRecord(newVehicle); // Guardar el registro del usuario en user_records.txt
+        historyManager.logEvent(plate, "ENTRADA"); 
+        
+        std::cout << "Vehiculo registrado y ingresado al parqueadero.\n";
+    }
+}
+
+bool ParkingManager::registerVehicle() {
+    std::string plate, name, id, phone, type;
+
+    // Validaciones con lambdas y templates
+    while (true) {
+        std::cout << "Ingrese placa (AAA000): ";
+        std::getline(std::cin, plate);
+        if (!InputValidator::validate(plate, plateValidator)) {
+            std::cout << "Placa invalida. Intente nuevamente.\n";
+            continue;
+        }
+        break;
+    }
+
+    while (true) {
+        std::cout << "Nombre del propietario: ";
+        std::getline(std::cin, name);
+        if (!InputValidator::validate(name, nameValidator)) {
+            std::cout << "Nombre invalido. Solo letras.\n";
+            continue;
+        }
+        break;
+    }
+
+    // Agregar validaciones para ID, teléfono y tipo de vehículo
+    std::cout << "Ingrese su Cedula: ";
+    std::getline(std::cin, id);
+
+    std::cout << "Ingrese telefono: ";
+    std::getline(std::cin, phone);
+
+    std::cout << "Ingrese tipo de vehiculo: ";
+    std::getline(std::cin, type);
+
+    Vehicle newVehicle(plate, name, id, phone, type);
+    vehicles.push_back(newVehicle);
+    
+    saveVehiclesToFile();
+    historyManager.logEvent(plate, "ENTRADA");
+    std::cout << "Vehiculo registrado exitosamente.\n";
+    
+    return true;
+}
+
+bool ParkingManager::findVehicle() {
+    std::string plate;
+    std::cout << "Ingrese placa del vehículo a buscar: ";
+    std::getline(std::cin, plate);
+
+    // Validar formato de placa
+    if (!InputValidator::isValidPlate(plate)) {
+        std::cout << "Placa invalida.\n";
+        return false;
+    }
+
+    auto vehicle = findVehicleByPlate(plate);
+    
+    if (vehicle) {
+        std::cout << "Vehiculo encontrado:\n";
+        std::cout << "Placa: " << vehicle->getPlate() << std::endl;
+        std::cout << "Propietario: " << vehicle->getOwnerName() << std::endl;
+        std::cout << "Cedula: " << vehicle->getOwnerID() << std::endl;
+        std::cout << "Telefono: " << vehicle->getOwnerPhone() << std::endl;
+        std::cout << "Tipo: " << vehicle->getVehicleType() << std::endl;
+        return true;
+    } else {
+        std::cout << "Vehiculo no encontrado.\n";
+        return false;
+    }
+}
+
+std::unique_ptr<Vehicle> ParkingManager::findVehicleByPlate(const std::string& plate) {
+    auto it = std::find_if(vehicles.begin(), vehicles.end(), 
+        [&plate](const Vehicle& v) { return v.getPlate() == plate; });
+    
+    return it != vehicles.end() ? 
+        std::make_unique<Vehicle>(*it) : nullptr;
+}
+
+void ParkingManager::saveVehiclesToFile() {
+    std::ofstream file(vehiclesFile);
+    for (const auto& vehicle : vehicles) {
+        file << vehicle.serializeBasic() << std::endl; // Guardar solo placa y tipo
+    }
+}
+
+
+void ParkingManager::loadVehiclesFromFile() {
+    std::ifstream file(vehiclesFile);
+    std::string line;
+    vehicles.clear(); // Limpiar la lista de vehículos antes de cargar
+
+    if (file.is_open()) {
+        while (std::getline(file, line)) {
+            auto tokens = TokenManager::split(line);
+            if (tokens.size() >= 2) {
+                // Crear un vehículo con la placa y el tipo
+                Vehicle vehicle(tokens[0], "", "", "", tokens[1]); // Placa y tipo de vehículo
+                vehicles.push_back(vehicle);
+            }
+        }
+        file.close();
+    } else {
+        std::cerr << "Error al abrir el archivo para cargar vehículos." << std::endl;
+    }
+}
+
+void ParkingManager::saveUserRecord(const Vehicle& vehicle) {
+    std::ofstream file(userRecordsFile, std::ios::app);
+    if (file.is_open()) {
+        file << vehicle.getOwnerName() << "," 
+             << vehicle.getOwnerID() << "," 
+             << vehicle.getOwnerPhone() << "," 
+             << vehicle.getPlate() << std::endl; // Guardar los datos del usuario
+        file.close();
     }
 }
 
 void ParkingManager::showParkingHistory() {
-    std::string plate, startDate, endDate;
-    std::cout << "Ingrese placa para consultar historial: ";
+    std::string plate;
+    std::string date;
+
+    std::cout << "Ingrese placa para ver historial: ";
     std::getline(std::cin, plate);
 
-    std::cout << "Ingrese fecha de inicio (YYYY-MM-DD): ";
-    std::getline(std::cin, startDate);
+    std::cout << "Ingrese fecha (YYYY-MM-DD): ";
+    std::getline(std::cin, date);
 
-    std::cout << "Ingrese fecha de fin (YYYY-MM-DD): ";
-    std::getline(std::cin, endDate);
+    // Obtener todos los eventos
+    auto events = historyManager.getAllEvents();
+    std::vector<ParkingEvent> filteredEvents;
 
-    std::ifstream file(historyFile);
-    std::string line;
-    bool found = false;
-
-    while (std::getline(file, line)) {
-        std::istringstream ss(line);
-        std::string dateTime, recordPlate, event;
-
-        std::getline(ss, dateTime, ',');
-        std::getline(ss, recordPlate, ',');
-        std::getline(ss, event);
-
-        if (recordPlate == plate && 
-            dateTime.substr(0, 10) >= startDate && 
-            dateTime.substr(0, 10) <= endDate) {
-            std::cout << dateTime << " - " << event << std::endl;
-            found = true;
+    // Filtrar eventos por placa y fecha
+    for (const auto& event : events) {
+        if (event.plate == plate && event.timestamp.substr(0, 10) == date) {
+            filteredEvents.push_back(event);
         }
     }
 
-    if (!found) {
-        std::cout << "No se encontró historial para esta placa en el rango de fechas.\n";
+    if (filteredEvents.empty()) {
+        std::cout << "No se encontraron eventos para la placa: " << plate 
+                  << " en la fecha especificada." << std::endl;
+    } else {
+        for (const auto& event : filteredEvents) {
+            std::cout << event.timestamp << " - " << event.eventType << std::endl;
+        }
     }
 }
 
@@ -201,20 +226,69 @@ void ParkingManager::vehicleExit() {
     std::cout << "Ingrese placa de salida: ";
     std::getline(std::cin, plate);
 
-    auto it = std::find_if(vehicles.begin(), vehicles.end(),
-        [&plate](const Vehicle& v) { return v.getPlate() == plate; });
+    // Validar formato de placa
+    if (!InputValidator::isValidPlate(plate)) {
+        std::cout << "Placa invalida.\n";
+        return;
+    }
 
-    if (it != vehicles.end()) {
-        logParkingEvent(plate, "SALIDA");
-        vehicles.erase(it);
-        std::cout << "Vehículo registrado como salida.\n";
+    auto vehicle = findVehicleByPlate(plate);
+    if (vehicle) {
+        historyManager.logEvent(plate, "SALIDA");
+        
+        vehicles.erase(
+            std::remove_if(vehicles.begin(), vehicles.end(), 
+                [&plate](const Vehicle& v) { return v.getPlate() == plate; }), 
+            vehicles.end()
+        );
+
+        saveVehiclesToFile();
+        std::cout << "Vehiculo registrado como salida.\n";
     } else {
-        std::cout << "Vehículo no encontrado en el sistema.\n";
+        std::cout << "Vehiculo no encontrado o ya ha salido.\n";
     }
 }
 
-void ParkingManager::mainMenu() {
+void ParkingManager::displayMainMenu() {
+    int choice = 0;
+    const int totalOptions = 5;
+
     while (true) {
-        handleMenuNavigation();
+        system("pause");
+        system("cls"); // Limpiar la pantalla
+        std::cout << "\n--- SISTEMA DE ESTACIONAMIENTO ---\n";
+        
+        // Mostrar opciones del menú
+        for (int i = 0; i < totalOptions; ++i) {
+            if (i == choice) {
+                std::cout << "> "; // Indicar la opción seleccionada
+            } else {
+                std::cout << "  ";
+            }
+            switch (i) {
+                case 0: std::cout << "Ingresar Vehiculo\n"; break;
+                case 1: std::cout << "Buscar Vehiculo\n"; break;
+                case 2: std::cout << "Historial de Parqueo\n"; break;
+                case 3: std::cout << "Salida de Vehiculo\n"; break;
+                case 4: std::cout << "Salir\n"; break;
+            }
+        }
+
+        // Capturar la tecla presionada
+        char key = _getch();
+        if (key == 's') { // Mover hacia abajo
+            choice = (choice + 1) % totalOptions;
+        } else if (key == 'w') { // Mover hacia arriba
+            choice = (choice - 1 + totalOptions) % totalOptions;
+        } else if (key == '\r') { // Enter
+            system("cls"); 
+            switch (choice) {
+                case 0: enterVehicle(); break;
+                case 1: findVehicle(); break;
+                case 2: showParkingHistory(); break;
+                case 3: vehicleExit(); break;
+                case 4: std::cout << "Saliendo...\n"; return;
+            }
+        }
     }
 }
