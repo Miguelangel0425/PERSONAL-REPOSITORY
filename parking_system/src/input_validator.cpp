@@ -92,11 +92,46 @@ bool InputValidator::isValidName(const std::string& name) {
 }
 
 bool InputValidator::isValidID(const std::string& id) {
-    return isOnlyNumbers(id) && id.length() == 10;
+    // Verificar que la cédula tenga exactamente 10 dígitos
+    if (id.length() != 10 || !std::all_of(id.begin(), id.end(), ::isdigit)) {
+        return false;
+    }
+
+    // Validar que el primer dígito corresponde a una provincia válida (1-9)
+    int provinceCode = id[0] - '0';
+    if (provinceCode < 1 || provinceCode > 9) {
+        return false;
+    }
+
+    // Algoritmo para verificar el dígito verificador
+    int sum = 0;
+    int multipliers[9] = {2, 1, 2, 1, 2, 1, 2, 1, 2};
+
+    for (int i = 0; i < 9; ++i) {
+        int digit = id[i] - '0';  // Convertir el carácter a número
+        sum += digit * multipliers[i];
+    }
+
+    // Calcular el dígito verificador
+    int remainder = sum % 10;
+    int checkDigit = (remainder == 0) ? 0 : 10 - remainder;
+
+    // Validar que el dígito verificador coincida con el décimo dígito de la cédula
+    return checkDigit == (id[9] - '0');
 }
 
 bool InputValidator::isValidPhone(const std::string& phone) {
-    return isOnlyNumbers(phone) && phone.length() == 10;
+    // Verificar que el número de teléfono tenga exactamente 10 dígitos
+    if (phone.length() != 10 || !std::all_of(phone.begin(), phone.end(), ::isdigit)) {
+        return false;
+    }
+
+    // Verificar que empiece con "09" (prefijo válido de celular ecuatoriano)
+    if (phone.substr(0, 2) != "09") {
+        return false;
+    }
+
+    return true;
 }
 
 std::string InputValidator::getValidatedPlate() {
