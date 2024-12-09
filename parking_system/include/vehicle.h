@@ -12,6 +12,13 @@ public:
             const std::string& ownerID, const std::string& ownerPhone, 
             const std::string& vehicleType);
 
+    void setOwnerName(const std::string &ownerName);
+    void setOwnerId(const std::string &ownerID);   
+    void setOwnerPhone(const std::string &ownerPhone);
+    void setVehicleType(const std::string &vehicleType);
+    void setUniqueToken(const std::string &uniqueToken);
+    void setEntryTime(const std::chrono::system_clock::time_point &entryTime);
+    
     // Getters
     std::string getPlate() const;
     std::string getOwnerName() const;

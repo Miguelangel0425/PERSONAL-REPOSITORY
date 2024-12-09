@@ -24,6 +24,11 @@ public:
     static bool isValidID(const std::string& id);
     static bool isValidPhone(const std::string& phone);
 
+    static std::string getValidatedPlate();
+    static std::string getValidatedText();
+    static std::string getValidatedNumber();
+    static std::string getValidatedDate();
+
 private:
     // Regex para validaciones
     static const std::regex plateRegex;

@@ -11,6 +11,27 @@ Vehicle::Vehicle(const std::string& plate, const std::string& ownerName,
     setEntryTime();
 }
 
+void Vehicle::setOwnerName(const std::string& ownerName) {
+
+    this->ownerName = ownerName;
+
+}
+void Vehicle::setOwnerId(const std::string& ownerID) {
+    this->ownerID = ownerID;
+}
+void Vehicle::setOwnerPhone(const std::string& ownerPhone) {
+    this->ownerPhone = ownerPhone;
+}
+void Vehicle::setVehicleType(const std::string& vehicleType) {
+    this->vehicleType = vehicleType;
+}
+void Vehicle::setUniqueToken(const std::string& uniqueToken) {
+    this->uniqueToken = uniqueToken;
+}
+void Vehicle::setEntryTime(const std::chrono::system_clock::time_point& entryTime) {
+    this->entryTime = entryTime;
+}
+
 std::string Vehicle::getPlate() const { return plate; }
 std::string Vehicle::getOwnerName() const { return ownerName; }
 std::string Vehicle::getOwnerID() const { return ownerID; }

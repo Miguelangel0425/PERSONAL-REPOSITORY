@@ -20,6 +20,9 @@ public:
     bool findVehicle();
     void showParkingHistory();
     void vehicleExit();
+    void showHelpManual();
+    void createBackup();
+    void restoreBackup();
     void displayMainMenu();
 
 private:
@@ -34,8 +37,9 @@ private:
      void saveUserRecord(const Vehicle& vehicle);
     void saveVehiclesToFile();
     void loadVehiclesFromFile();
-    std::unique_ptr<Vehicle> findVehicleByPlate(const std::string& plate);
-    
+    void showParkingLotCircular();
+    std::unique_ptr<Vehicle> findVehicleByPlate(const std::string &plate);
+
     // Validadores de entrada con lambdas
     std::function<bool(const std::string&)> plateValidator = 
         [](const std::string& plate) { 

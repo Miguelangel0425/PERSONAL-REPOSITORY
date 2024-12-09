@@ -1,0 +1,86 @@
+@startuml ParkingSystemDiagram
+
+class Vehicle {
+    - String plate
+    - String ownerName
+    - String ownerID
+    - String ownerPhone
+    - String vehicleType
+    - String uniqueToken
+    - chrono::system_clock::time_point entryTime
+    + Vehicle()
+    + Vehicle(String plate, String ownerName, String ownerID, String ownerPhone, String vehicleType)
+    + String getPlate()
+    + String getOwnerName()
+    + String getOwnerID()
+    + String getOwnerPhone()
+    + String getVehicleType()
+    + String serializeBasic()
+    + String serialize()
+    + static Vehicle deserialize(String data)
+}
+
+class HistoryManager {
+    - String historyFile
+    + HistoryManager(String historyFile)
+    + void logEvent(String plate, String eventType)
+    + vector<ParkingEvent> getAllEvents()
+    + vector<ParkingEvent> getEventsByPlate(String plate)
+    + vector<ParkingEvent> getEventsByDateRange(String startDate, String endDate)
+}
+
+class ParkingEvent {
+    - String timestamp
+    - String plate
+    - String eventType
+}
+
+class InputValidator {
+    + static bool isValidPlate(String plate)
+    + static bool isOnlyLetters(String text)
+    + static bool isOnlyNumbers(String text)
+    + static bool isValidName(String name)
+    + static bool isValidID(String id)
+    + static bool isValidPhone(String phone)
+    + static String getValidatedPlate()
+    + static String getValidatedText()
+    + static String getValidatedNumber()
+    + static String getValidatedDate()
+}
+
+class TokenManager {
+    + static String generateToken(size_t length)
+    + static vector<String> split(String str, char delimiter)
+    + static String join(vector<String> tokens, char delimiter)
+}
+
+class CaesarCipher {
+    + static String encrypt(String text, int shift)
+    + static String decrypt(String text, int shift)
+}
+
+class ParkingManager {
+    - String dataDir
+    - String vehiclesFile
+    - String userRecordsFile
+    - String historyFile
+    - HistoryManager historyManager
+    - vector<Vehicle> vehicles
+    + ParkingManager(String dataDir)
+    + void enterVehicle()
+    + bool registerVehicle()
+    + bool findVehicle()
+    + void showParkingHistory()
+    + void vehicleExit()
+    + void showHelpManual()
+    + void displayMainMenu()
+}
+
+ParkingManager --> Vehicle
+ParkingManager --> HistoryManager
+ParkingManager --> InputValidator
+ParkingManager --> TokenManager
+HistoryManager --> ParkingEvent
+HistoryManager --> CaesarCipher
+
+@enduml
