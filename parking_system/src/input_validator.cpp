@@ -10,13 +10,72 @@ const std::regex InputValidator::numberRegex("^\\d+$");
 const std::regex InputValidator::nameRegex("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$");
 
 bool InputValidator::isValidPlate(const std::string& plate) {
-    std::regex plateRegex(
-        "^([A-Z]{3}[0-9]{3,4})$|"   // Placas particulares (ABC123 o ABC1234)
-        "^([A-Z]{2}[A-Z][0-9]{3,4})$|" // Placas transporte público (PBX123 o PBX1234)
-        "^(CC[0-9]{3,4}[A-Z]?)$"    // Placas diplomáticas (CC1234A)
-    );
+    // Códigos de provincias válidos
+    const std::vector<std::string> provinceCodes = {
+        "A", "W", "Q", "B", "G", "S", "U", "I", "P", 
+        "C", "L", "Y", "H", "R", "J", "X", "M", "K", 
+        "O", "V", "T", "E", "N", "Z"
+    };
 
-    return std::regex_match(plate, plateRegex);
+    // Códigos especiales
+    const std::vector<std::string> specialCodes = {
+        "CC", "CD", "OI", "AT", "IT"
+    };
+
+    // Convertir a mayúsculas para validación consistente
+    std::string upperPlate = plate;
+    std::transform(upperPlate.begin(), upperPlate.end(), upperPlate.begin(), ::toupper);
+
+    // Validar placas de provincias
+    if (upperPlate.length() == 6 || upperPlate.length() == 7) {
+        // Verificar si el primer código es un código de provincia válido
+        auto it = std::find(provinceCodes.begin(), provinceCodes.end(), upperPlate.substr(0, 1));
+        if (it != provinceCodes.end()) {
+            // Verificar que los siguientes 2 caracteres sean letras
+            for (int i = 1; i < 3; ++i) {
+                if (!std::isalpha(upperPlate[i])) {
+                    return false;
+                }
+            }
+            
+            // Verificar que los últimos 3-4 caracteres sean números
+            for (size_t i = 3; i < upperPlate.length(); ++i) {
+                if (!std::isdigit(upperPlate[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    // Validar placas especiales
+    if (upperPlate.length() >= 4) {
+        auto it = std::find(specialCodes.begin(), specialCodes.end(), upperPlate.substr(0, 2));
+        if (it != specialCodes.end()) {
+            // Verificar que hay números después del código especial
+            for (size_t i = 2; i < upperPlate.length(); ++i) {
+                if (!std::isdigit(upperPlate[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    // Verificar placas de internación temporal con color
+    if (upperPlate.length() >= 8) {
+        if ((upperPlate.substr(0, 2) == "IT") && 
+            (upperPlate.substr(2, 4) == "-AZUL" || upperPlate.substr(2, 4) == "-ROJO")) {
+            for (size_t i = 6; i < upperPlate.length(); ++i) {
+                if (!std::isdigit(upperPlate[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool InputValidator::isOnlyLetters(const std::string& text) {
@@ -46,7 +105,6 @@ std::string InputValidator::getValidatedPlate() {
 
     while (true) { 
         input.clear();
-        std::cout << "Ingrese placa (solo letras y números, use DEL para borrar): ";
 
         while ((ch = _getch()) != '\r') { 
             if (std::isalnum(ch)) {

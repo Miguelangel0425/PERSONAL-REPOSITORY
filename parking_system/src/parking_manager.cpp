@@ -107,7 +107,7 @@ void ParkingManager::enterVehicle() {
 
 
         while (true) {
-            std::cout << "Ingrese teléfono: ";
+            std::cout << "Ingrese telefono: ";
             phone = InputValidator::getValidatedNumber();
             if (!InputValidator::isValidPhone(phone)) {
                 std::cout << "Telefono invalido. Debe tener 10 digitos.\n";
@@ -158,7 +158,7 @@ std::string plate, name, id, phone, type;
         std::cout << "Ingrese su Cedula: ";
         id = validator.getValidatedNumber();
         if (!InputValidator::isValidID(id)) {
-            std::cout << "Cédula invalida. Debe tener 10 digitos.\n";
+            std::cout << "Cedula invalida. Debe tener 10 digitos.\n";
             continue;
         }
         break;
@@ -320,15 +320,30 @@ void ParkingManager::loadVehiclesFromFile() {
 }
 
 void ParkingManager::showParkingLotCircular() {
+    // Filter vehicles currently in the parking lot
+    std::vector<Vehicle> currentVehicles;
+    auto events = historyManager.getAllEvents();
+    
+    for (const auto& vehicle : vehicles) {
+        // Find the last event for this vehicle
+        auto lastEvent = std::find_if(events.rbegin(), events.rend(), 
+            [&vehicle](const ParkingEvent& event) { return event.plate == vehicle.getPlate(); });
+        
+        // Check if the last event is an ENTRADA
+        if (lastEvent != events.rend() && lastEvent->eventType == "ENTRADA") {
+            currentVehicles.push_back(vehicle);
+        }
+    }
+
+    int totalVehicles = currentVehicles.size();
     const int spacesPerLayer = 8; // Número de espacios por capa
-    int totalVehicles = vehicles.size();
     int totalSpaces = std::max(totalVehicles + 4, spacesPerLayer); // Agregar espacios vacíos
     int layers = std::ceil((double)totalSpaces / spacesPerLayer); // Calcular capas necesarias
 
     // Crear espacios vacíos y ocupados
-    std::vector<std::string> parkingSpaces(totalSpaces, "   "); // Espacios vacíos
-    for (size_t i = 0; i < vehicles.size(); ++i) {
-        parkingSpaces[i] = vehicles[i].getPlate();
+    std::vector<std::string> parkingSpaces(totalSpaces, " - LIBRE - "); // Espacios vacíos
+    for (size_t i = 0; i < currentVehicles.size(); ++i) {
+        parkingSpaces[i] = currentVehicles[i].getPlate();
     }
 
     // Mezclar los espacios vacíos y ocupados
@@ -336,8 +351,16 @@ void ParkingManager::showParkingLotCircular() {
     std::default_random_engine rng(rd());
     std::shuffle(parkingSpaces.begin(), parkingSpaces.end(), rng);
 
+    // Colores para mejorar la visualización
+    const std::string RESET = "\033[0m";
+    const std::string GREEN = "\033[32m";
+    const std::string BLUE = "\033[34m";
+    const std::string YELLOW = "\033[33m";
+
     // Mostrar diseño circular dinámico
-    std::cout << "\n╭──────────────────────── PARQUEADERO CIRCULAR ────────────────────────╮\n";
+    std::cout << YELLOW << "\n**************************************** PARQUEADERO ****************************************" << RESET << std::endl;
+    std::cout << BLUE << "                    Capacidad Total: " << totalSpaces << " espacios" << RESET << std::endl;
+    std::cout << BLUE << "                    Vehículos Actuales: " << totalVehicles << RESET << std::endl;
 
     int index = 0;
     for (int layer = 0; layer < layers; ++layer) {
@@ -347,28 +370,36 @@ void ParkingManager::showParkingLotCircular() {
         int padding = (spacesPerLayer - spacesInLayer) * 6; // Ajuste dinámico
         std::cout << std::string(padding, ' ');
 
-        // Dibujar capa
-        std::cout << "╭";
+        // Dibujar capa superior
+        std::cout << GREEN << "*";
         for (int i = 0; i < spacesInLayer; ++i) {
-            std::cout << "───╮";
+            std::cout << "*******";
         }
-        std::cout << "\b \n";
+        std::cout << "\b " << RESET << std::endl;
 
-        std::cout << std::string(padding, ' ') << "│";
+        // Dibujar contenido de la capa
+        std::cout << std::string(padding, ' ') << GREEN << "*";
         for (int i = 0; i < spacesInLayer; ++i) {
-            std::cout << std::setw(3) << parkingSpaces[index++] << "│";
+            std::string spaceStatus = parkingSpaces[index++];
+            std::cout << (spaceStatus == " - LIBRE - " ? BLUE : YELLOW);
+            std::cout << std::setw(7) << std::left << spaceStatus << GREEN << "*";
         }
-        std::cout << "\n";
+        std::cout << RESET << std::endl;
 
-        std::cout << std::string(padding, ' ') << "╰";
+        // Dibujar capa inferior
+        std::cout << std::string(padding, ' ') << GREEN << "*";
         for (int i = 0; i < spacesInLayer; ++i) {
-            std::cout << "───╯";
+            std::cout << "*******";
         }
-        std::cout << "\b \n";
+        std::cout << "\b " << RESET << std::endl;
     }
 
-    std::cout << "╰────────────────────────────────────────────────────────────────────╯\n";
+    std::cout << YELLOW << "*************************************************************************************" << RESET << std::endl;
+    
+    std::cout << "\nPresione cualquier tecla para continuar...";
+    _getch();
 }
+
 
 void ParkingManager::saveUserRecord(const Vehicle& vehicle) {
     std::ofstream file(userRecordsFile, std::ios::app);
@@ -480,18 +511,18 @@ void ParkingManager::vehicleExit() {
 
 void ParkingManager::showHelpManual() {
     system("cls");
-    std::cout << "\n╔════════════════════════════════════════════════════════════╗\n";
-    std::cout << "║                     MANUAL DE AYUDA                        ║\n";
-    std::cout << "╚════════════════════════════════════════════════════════════╝\n";
-    std::cout << "\nBienvenido al sistema de gestión del parqueadero.\n\n";
+   
+    std::cout << "------------------- MANUAL DE AYUDA---------------------------\n";
+    std::cout << "\n";
+    std::cout << "\nBienvenido al sistema de gestion del parqueadero.\n\n";
     std::cout << "Opciones disponibles:\n";
-    std::cout << "  1. **Ingresar Vehículo**: Permite registrar un vehículo en el sistema.\n";
-    std::cout << "  2. **Buscar Vehículo**: Busca un vehículo registrado por su placa.\n";
+    std::cout << "  1. **Ingresar Vehiculo**: Permite registrar un vehiculo en el sistema.\n";
+    std::cout << "  2. **Buscar Vehiculo**: Busca un vehiculo registrado por su placa.\n";
     std::cout << "  3. **Historial de Parqueo**: Muestra el historial de entradas y salidas.\n";
-    std::cout << "  4. **Salida de Vehículo**: Registra la salida de un vehículo del parqueadero.\n";
-    std::cout << "  5. **Mostrar Parqueadero Circular**: Visualiza los vehículos estacionados.\n";
+    std::cout << "  4. **Salida de Vehiculo**: Registra la salida de un vehiculo del parqueadero.\n";
+    std::cout << "  5. **Mostrar Parqueadero Circular**: Visualiza los vehiculos estacionados.\n";
     std::cout << "  6. **Salir**: Cierra el programa.\n\n";
-    std::cout << "Tecla rápida:\n";
+    std::cout << "Tecla rapida:\n";
     std::cout << "  - Presiona **F12** en cualquier momento para abrir este manual.\n\n";
     std::cout << "Presiona cualquier tecla para volver al menú principal...\n";
 
@@ -600,11 +631,11 @@ void ParkingManager::displayMainMenu() {
                 std::cout << "  ";
             }
             switch (i) {
-                case 0: std::cout << "Ingresar Vehículo\n"; break;
-                case 1: std::cout << "Buscar Vehículo\n"; break;
+                case 0: std::cout << "Ingresar Vehiculo\n"; break;
+                case 1: std::cout << "Buscar Vehiculo\n"; break;
                 case 2: std::cout << "Historial de Parqueo\n"; break;
-                case 3: std::cout << "Salida de Vehículo\n"; break;
-                case 4: std::cout << "Mostrar Parqueadero Circular\n"; break;
+                case 3: std::cout << "Salida de Vehiculo\n"; break;
+                case 4: std::cout << "Mostrar Parqueadero \n"; break;
                 case 5: std::cout << "Crear Respaldo\n"; break;
                 case 6: std::cout << "Restaurar Respaldo\n"; break;
                 case 7: std::cout << "Salir\n"; break;
@@ -615,9 +646,10 @@ void ParkingManager::displayMainMenu() {
 
         if (ch == 0 || ch == 224) { 
             ch = _getch();
-            if (ch == 123) { 
-                showHelpManual();
-                continue; 
+            if (ch == 134) {  // Código para F12
+            system("cls"); 
+            showHelpManual();
+            continue; 
             }
         }
 
