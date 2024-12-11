@@ -46,17 +46,16 @@ void ParkingManager::enterVehicle() {
 
     std::string plate;
 
-    std::cout << "Ingrese placa (AAA000): ";
-    plate = InputValidator::getValidatedPlate();
+    while(true){
+        std::cout << "Ingrese placa de entrada: ";
+        plate = InputValidator::getValidatedPlate();
 
-
-    if (!InputValidator::isValidPlate(plate)) {
-        std::cout << "Placa invalida.\n";
-        std::cout << "\nPresione cualquier tecla para continuar...";
-        _getch();
-        return;
+        if(!InputValidator::isValidPlate(plate)) {
+            std::cout << "Placa invalida.\n";
+            continue;
+        }
+        break;
     }
-
 
     auto eventos = historyManager.getAllEvents();
     auto ultimoEvento = std::find_if(eventos.rbegin(), eventos.rend(), 
@@ -116,8 +115,15 @@ void ParkingManager::enterVehicle() {
             break;
         }
 
-        std::cout << "Ingrese tipo de vehiculo: ";
-        type = InputValidator::getValidatedText();
+        while(true){
+            std::cout << "Ingrese tipo de vehiculo: ";
+            type = InputValidator::getValidatedText();
+            if(type.empty()) {
+                std::cout << "El campo no puede estar vacio.\n";
+                continue;
+            }
+            break;
+        }
 
         Vehicle newVehicle(plate, name, id, phone, type);
         vehicles.push_back(newVehicle);

@@ -1,16 +1,19 @@
 make.exe --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/c/Users/Labs-G300/Documents/PERSONAL-REPOSITORY/parking_system'
+make: Entering directory '/c/Users/H305 M12/Documents/PERSONAL-REPOSITORY/parking_system'
 mkdir -p build
 mkdir -p data
  
 g++ -std=c++17 -Wall -Wextra -Iinclude -c src/cipher.cpp -o build/cipher.o
 g++ -std=c++17 -Wall -Wextra -Iinclude -c src/history_manager.cpp -o build/history_manager.o
-g++ -std=c++17 -Wall -Wextra -Iinclude -c src/input_validator.cpp -o build/input_validator.o
-g++ -std=c++17 -Wall -Wextra -Iinclude -c src/main.cpp -o build/main.o
  
+g++ -std=c++17 -Wall -Wextra -Iinclude -c src/input_validator.cpp -o build/input_validator.o
+ 
+g++ -std=c++17 -Wall -Wextra -Iinclude -c src/main.cpp -o build/main.o
 g++ -std=c++17 -Wall -Wextra -Iinclude -c src/parking_manager.cpp -o build/parking_manager.o
+ 
 g++ -std=c++17 -Wall -Wextra -Iinclude -c src/token_manager.cpp -o build/token_manager.o
+ 
 g++ -std=c++17 -Wall -Wextra -Iinclude -c src/vehicle.cpp -o build/vehicle.o
 g++ -std=c++17 -Wall -Wextra -Iinclude -o parking_system build/cipher.o build/history_manager.o build/input_validator.o build/main.o build/parking_manager.o build/token_manager.o build/vehicle.o 
-make: Leaving directory '/c/Users/Labs-G300/Documents/PERSONAL-REPOSITORY/parking_system'
+make: Leaving directory '/c/Users/H305 M12/Documents/PERSONAL-REPOSITORY/parking_system'
  

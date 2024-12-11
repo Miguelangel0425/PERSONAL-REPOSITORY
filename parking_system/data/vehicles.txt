@@ -6,4 +6,6 @@ PCF7679,Nissan
 CDV0425,Nissan
 PQD0423,Toyota
 ASD302,Audi
-
+ASD0432,Nissan
+AQE043,Ferrari
+ASA1111,

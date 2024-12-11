@@ -99,7 +99,7 @@ bool InputValidator::isValidID(const std::string& id) {
 
     // 2. Verificar que el primer dígito sea 1, 2 o 3
     int primerDigito = id[0] - '0';  // Convertir el primer carácter a número
-    if (primerDigito < 1 || primerDigito > 3) {
+    if (primerDigito < 0 || primerDigito > 3) {
         return false;
     }
 
