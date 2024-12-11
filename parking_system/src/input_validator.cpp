@@ -92,32 +92,42 @@ bool InputValidator::isValidName(const std::string& name) {
 }
 
 bool InputValidator::isValidID(const std::string& id) {
-    // Verificar que la cédula tenga exactamente 10 dígitos
+    // 1. Verificar que la cédula tenga exactamente 10 dígitos
     if (id.length() != 10 || !std::all_of(id.begin(), id.end(), ::isdigit)) {
         return false;
     }
 
-    // Validar que el primer dígito corresponde a una provincia válida (1-9)
-    int provinceCode = id[0] - '0';
-    if (provinceCode < 1 || provinceCode > 9) {
+    // 2. Verificar que el primer dígito sea 1, 2 o 3
+    int primerDigito = id[0] - '0';  // Convertir el primer carácter a número
+    if (primerDigito < 1 || primerDigito > 3) {
         return false;
     }
 
-    // Algoritmo para verificar el dígito verificador
-    int sum = 0;
-    int multipliers[9] = {2, 1, 2, 1, 2, 1, 2, 1, 2};
+    // 3. Calcular el dígito verificador
+    int suma = 0;
+    int coef[] = {2, 1, 2, 1, 2, 1, 2, 1, 2};  // Coeficientes para multiplicar
 
-    for (int i = 0; i < 9; ++i) {
-        int digit = id[i] - '0';  // Convertir el carácter a número
-        sum += digit * multipliers[i];
+    for (int i = 0; i < 9; i++) {
+        int digito = id[i] - '0';  // Convertir el carácter a número
+        int resultado = digito * coef[i];
+
+        // Si el resultado es mayor o igual a 10, sumamos los dígitos
+        if (resultado >= 10) {
+            suma += resultado - 9;  // Equivalente a sumar los dígitos de un número >= 10
+        } else {
+            suma += resultado;
+        }
     }
 
-    // Calcular el dígito verificador
-    int remainder = sum % 10;
-    int checkDigit = (remainder == 0) ? 0 : 10 - remainder;
+    // 4. Obtener el dígito verificador
+    int digitoVerificadorCalculado = 10 - (suma % 10);
+    if (digitoVerificadorCalculado == 10) {
+        digitoVerificadorCalculado = 0;
+    }
 
-    // Validar que el dígito verificador coincida con el décimo dígito de la cédula
-    return checkDigit == (id[9] - '0');
+    // 5. Comparar con el dígito verificador de la cédula (último dígito)
+    int digitoVerificadorCedula = id[9] - '0';  // El último carácter es el dígito verificador
+    return digitoVerificadorCedula == digitoVerificadorCalculado;
 }
 
 bool InputValidator::isValidPhone(const std::string& phone) {
@@ -134,6 +144,60 @@ bool InputValidator::isValidPhone(const std::string& phone) {
     return true;
 }
 
+bool InputValidator::isValidTime(const std::string& time) {
+    std::istringstream iss(time);
+    std::string hours, minutes, seconds;
+    std::getline(iss, hours, ':');
+    std::getline(iss, minutes, ':');
+    std::getline(iss, seconds);
+
+    // Validar que se hayan leído exactamente 3 partes
+    if (hours.length() != 2 || minutes.length() != 2 || seconds.length() != 2) {
+        return false;
+    }
+
+    // Validar rangos
+    int h = std::stoi(hours);
+    int m = std::stoi(minutes);
+    int s = std::stoi(seconds);
+
+    return (h >= 0 && h <= 23) && (m >= 0 && m <= 59) && (s >= 0 && s <= 59);
+}
+
+std::string InputValidator::getValidatedTime() {
+    std::string input;
+    char ch;
+
+    // Contadores para validar el formato
+    int colonCount = 0; // Contador de dos puntos
+    int digitCount = 0; // Contador de dígitos
+
+    while ((ch = _getch()) != '\r') { // '\r' es Enter
+        if (isdigit(ch)) {
+            // Solo permitir hasta 8 dígitos (HHMMSS)
+            if (digitCount < 8) {
+                std::cout << ch; 
+                input += ch;    
+                digitCount++;
+            }
+        } else if (ch == ':' && colonCount < 2) {
+            // Permitir hasta 2 dos puntos
+            std::cout << ch; 
+            input += ch;    
+            colonCount++;
+        } else if (ch == '\b' && !input.empty()) { 
+            std::cout << "\b \b"; 
+            input.pop_back();     
+            if (isdigit(input.back())) {
+                digitCount--;
+            } else if (input.back() == ':') {
+                colonCount--;
+            }
+        }
+    }
+    std::cout << std::endl; 
+    return input;
+}
 std::string InputValidator::getValidatedPlate() {
     std::string input;
     char ch;

@@ -19,12 +19,12 @@ public:
     bool registerVehicle();
     bool findVehicle();
     void showParkingHistory();
+    void ShowParkingTimeHistory();
     void vehicleExit();
     void showHelpManual();
     void createBackup();
     void restoreBackup();
     void displayMainMenu();
-
 private:
     std::string dataDir;
     std::string vehiclesFile;

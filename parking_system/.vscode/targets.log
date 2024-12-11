@@ -1,21 +1,24 @@
 make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # GNU Make 4.4.1
 # Built for x86_64-pc-msys
+ 
 # Copyright (C) 1988-2023 Free Software Foundation, Inc.
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Mon Dec  9 07:35:48 2024
+# Make data base, printed on Wed Dec 11 08:28:21 2024
 
 # Variables
 
 # environment
- 
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+# environment
 SYSTEMDRIVE = C:
 # environment
 LC_ALL = C
+ 
 # environment
 USERPROFILE = C:\Users\Labs-G300
 # environment
@@ -37,9 +40,11 @@ MAKE_COMMAND := make
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_8624_EIMIRGFDFKMZDHPR
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_6764_GFZSLSBMOJDZOPRL
 # makefile (from 'Makefile', line 7)
 INCLUDE_DIR = include
+# environment
+FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -65,13 +70,13 @@ TMP = /c/Users/LABS-G~1/AppData/Local/Temp
 # makefile
 MAKEFLAGS = pqrR
 # environment
-EFC_5716 = 1
-# environment
 ONEDRIVE = C:\Users\Labs-G300\OneDrive
 # makefile
 CURDIR := /c/Users/Labs-G300/Documents/PERSONAL-REPOSITORY/parking_system
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+VSCODE_L10N_BUNDLE_LOCATION = 
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
@@ -91,7 +96,7 @@ MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 8624
+VSCODE_PID = 6764
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
@@ -173,9 +178,12 @@ PUBLIC = C:\Users\Public
 # environment
 APPDATA = C:\Users\Labs-G300\AppData\Roaming
 # environment
+ 
 HOMEDRIVE = C:
 # environment
 PROCESSOR_ARCHITECTURE = AMD64
+# environment
+EFC_3748 = 1
 # makefile (from 'Makefile', line 8)
 BUILD_DIR = build
 # environment
@@ -215,7 +223,7 @@ VSCODE_ESM_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 37 Stepping 5, GenuineIntel
 # variable set hash-table stats:
-# Load=101/1024=10%, Rehash=0, Collisions=14/144=10%
+# Load=104/1024=10%, Rehash=0, Collisions=16/148=11%
 
 # Pattern-specific Variable Values
 
@@ -239,16 +247,35 @@ build/%.o: src/%.cpp
 
 parking_system: build/cipher.o build/history_manager.o build/input_validator.o build/main.o build/parking_manager.o build/token_manager.o build/vehicle.o
 #  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 #  recipe to execute (from 'Makefile', line 30):
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Not a target:
+src/cipher.cpp:
+#  Implicit rule search has been done.
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-09 07:15:00.2365456
+#  File has been updated.
+#  Successfully updated.
 
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
 #  File is secondary (prerequisite of .SECONDARY).
 #  Last modified 2024-12-09 07:15:00.1428025
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/main.cpp:
+#  Implicit rule search has been done.
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-09 07:15:00.3771957
 #  File has been updated.
 #  Successfully updated.
 
@@ -263,21 +290,32 @@ clean:
 # Not a target:
 build/vehicle.o:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-build/cipher.o:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+build/cipher.o: src/cipher.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'cipher'
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-11 08:28:04.9966415
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 34):
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Not a target:
 build/token_manager.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+
+# Not a target:
+src/input_validator.cpp:
+#  Implicit rule search has been done.
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-11 08:20:22.1025818
+#  File has been updated.
+#  Successfully updated.
 
 # Not a target:
 .DEFAULT:
@@ -293,12 +331,12 @@ all: build data parking_system
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 
 build:
 #  Implicit rule search has not been done.
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-09 07:15:00.1740483
+#  Last modified 2024-12-11 08:28:12.9211484
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 23):
@@ -306,36 +344,22 @@ build:
 
 data:
 #  Implicit rule search has not been done.
-#  Implicit/static pattern stem: ''
-#  File does not exist.
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-09 08:10:33.244797
 #  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := data
-# automatic
-# * := 
-# automatic
-# < := 
-# automatic
-# + := 
-# automatic
-# % := 
-# automatic
-# ^ := 
-# automatic
-# ? := 
-# automatic
-# | := 
-# variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/12=8%
+#  Successfully updated.
 #  recipe to execute (from 'Makefile', line 26):
 	mkdir -p $(DATA_DIR)
 
-# Not a target:
-build/input_validator.o:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+build/input_validator.o: src/input_validator.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'input_validator'
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-11 08:28:18.9487707
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 34):
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Not a target:
 build/parking_manager.o:
@@ -344,42 +368,70 @@ build/parking_manager.o:
 #  File has not been updated.
 
 # Not a target:
-.SUFFIXES:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+src/history_manager.cpp:
+#  Implicit rule search has been done.
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-09 07:15:00.2365456
+#  File has been updated.
+#  Successfully updated.
 
-# Not a target:
-build/main.o:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+build/main.o: src/main.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'main'
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := build/main.o
+# automatic
+# * := main
+# automatic
+# < := src/main.cpp
+# automatic
+# + := src/main.cpp
+# automatic
+# % := 
+# automatic
+# ^ := src/main.cpp
+# automatic
+# ? := src/main.cpp
+# automatic
+# | := 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/15=7%
+#  recipe to execute (from 'Makefile', line 34):
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: all clean
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-build/history_manager.o:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+build/history_manager.o: src/history_manager.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'history_manager'
+#  File is secondary (prerequisite of .SECONDARY).
+#  Last modified 2024-12-11 08:28:07.0055185
+#  File has been updated.
+ 
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 34):
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # files hash-table stats:
-# Load=16/1024=2%, Rehash=0, Collisions=0/44=0%
+# Load=20/1024=2%, Rehash=0, Collisions=0/59=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 34 / storage = 450 B / avg = 13 B
-# current buf: size = 8162 B / used = 450 B / count = 34 / avg = 13 B
+# strcache buffers: 1 (0) / strings = 41 / storage = 551 B / avg = 13 B
+# current buf: size = 8162 B / used = 551 B / count = 41 / avg = 13 B
 
-# strcache performance: lookups = 54 / hit rate = 37%
+# strcache performance: lookups = 65 / hit rate = 36%
 # hash-table stats:
-# Load=34/8192=0%, Rehash=0, Collisions=0/54=0%
-# Finished Make data base on Mon Dec  9 07:35:48 2024
+# Load=41/8192=1%, Rehash=0, Collisions=0/65=0%
+# Finished Make data base on Wed Dec 11 08:28:21 2024
 
  

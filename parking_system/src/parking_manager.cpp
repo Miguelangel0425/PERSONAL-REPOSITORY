@@ -400,7 +400,6 @@ void ParkingManager::showParkingLotCircular() {
     _getch();
 }
 
-
 void ParkingManager::saveUserRecord(const Vehicle& vehicle) {
     std::ofstream file(userRecordsFile, std::ios::app);
     if (file.is_open()) {
@@ -449,6 +448,70 @@ void ParkingManager::showParkingHistory() {
     } else {
         for (const auto& event : filteredEvents) {
             std::cout << event.timestamp << " - " << event.eventType << std::endl;
+        }
+    }
+
+    std::cout << "\nPresione cualquier tecla para continuar...";
+    _getch();
+}
+
+void ParkingManager::ShowParkingTimeHistory() {
+    std::string startTimeStr, endTimeStr;
+
+    while(true){
+        std::cout << "Ingrese hora de inicio (HH:MM:SS): ";
+        startTimeStr = InputValidator::getValidatedTime();
+
+        if(!InputValidator::isValidTime(startTimeStr)) {
+            std::cout << "Hora invalida.\n";
+            continue;
+        }
+        break;
+    }
+
+    while(true){
+        std::cout << "Ingrese hora de fin (HH:MM:SS): ";
+        endTimeStr = InputValidator::getValidatedTime();
+
+        if(!InputValidator::isValidTime(endTimeStr)) {
+            std::cout << "Hora invalida.\n";
+            continue;
+        }
+        break;
+    }
+
+    std::tm startTime = {};
+    std::tm endTime = {};
+    std::istringstream(startTimeStr) >> std::get_time(&startTime, "%H:%M:%S");
+    std::istringstream(endTimeStr) >> std::get_time(&endTime, "%H:%M:%S");
+
+    // Obtener todos los eventos
+    auto events = historyManager.getAllEvents();
+    std::vector<ParkingEvent> filteredEvents;
+
+    // Lambda para filtrar eventos de entrada por rango de tiempo
+    auto isInTimeRange = [&startTime, &endTime](const ParkingEvent& event) {
+        if (event.eventType != "ENTRADA") {
+            return false; // Solo considerar eventos de entrada
+        }
+
+        std::tm eventTime = {};
+        std::istringstream(event.timestamp.substr(11, 8)) >> std::get_time(&eventTime, "%H:%M:%S");
+
+        // Comparar el tiempo del evento con el rango
+        return std::difftime(std::mktime(&eventTime), std::mktime(&startTime)) >= 0 &&
+               std::difftime(std::mktime(&eventTime), std::mktime(&endTime)) <= 0;
+    };
+
+    // Filtrar eventos usando la lambda
+    std::copy_if(events.begin(), events.end(), std::back_inserter(filteredEvents), isInTimeRange);
+
+    if (filteredEvents.empty()) {
+        std::cout << "No se encontraron eventos de entrada en el rango de tiempo especificado." << std::endl;
+    } else {
+        std::cout << "Eventos de entrada en el rango de tiempo especificado:\n";
+        for (const auto& event : filteredEvents) {
+            std::cout << event.timestamp << " - " << event.eventType << " - Placa: " << event.plate << std::endl;
         }
     }
 
@@ -617,7 +680,7 @@ void ParkingManager::restoreBackup() {
 
 void ParkingManager::displayMainMenu() {
     int choice = 0;
-    const int totalOptions = 8; 
+    const int totalOptions = 9; 
     bool exitProgram = false;
 
     while (!exitProgram) {
@@ -634,11 +697,12 @@ void ParkingManager::displayMainMenu() {
                 case 0: std::cout << "Ingresar Vehiculo\n"; break;
                 case 1: std::cout << "Buscar Vehiculo\n"; break;
                 case 2: std::cout << "Historial de Parqueo\n"; break;
-                case 3: std::cout << "Salida de Vehiculo\n"; break;
-                case 4: std::cout << "Mostrar Parqueadero \n"; break;
-                case 5: std::cout << "Crear Respaldo\n"; break;
-                case 6: std::cout << "Restaurar Respaldo\n"; break;
-                case 7: std::cout << "Salir\n"; break;
+                case 3: std::cout <<"Historial de Parqueo por tiempo\n"; break;
+                case 4: std::cout << "Salida de Vehiculo\n"; break;
+                case 5: std::cout << "Mostrar Parqueadero \n"; break;
+                case 6: std::cout << "Crear Respaldo\n"; break;
+                case 7: std::cout << "Restaurar Respaldo\n"; break;
+                case 8: std::cout << "Salir\n"; break;
             }
         }
 
@@ -667,11 +731,12 @@ void ParkingManager::displayMainMenu() {
                     case 0: enterVehicle(); break;
                     case 1: findVehicle(); break;
                     case 2: showParkingHistory(); break;
-                    case 3: vehicleExit(); break;
-                    case 4: showParkingLotCircular(); break;
-                    case 5: createBackup(); break;
-                    case 6: restoreBackup(); break;
-                    case 7: exitProgram = true; break;
+                    case 3: ShowParkingTimeHistory(); break;
+                    case 4: vehicleExit(); break;
+                    case 5: showParkingLotCircular(); break;
+                    case 6: createBackup(); break;
+                    case 7: restoreBackup(); break;
+                    case 8: exitProgram = true; break;
                 }
                 break;
         }

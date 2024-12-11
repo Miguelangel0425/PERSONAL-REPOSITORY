@@ -23,11 +23,13 @@ public:
     static bool isValidName(const std::string& name);
     static bool isValidID(const std::string& id);
     static bool isValidPhone(const std::string& phone);
-
+    static bool isValidTime(const std::string& time);
+       
     static std::string getValidatedPlate();
     static std::string getValidatedText();
     static std::string getValidatedNumber();
     static std::string getValidatedDate();
+    static std::string getValidatedTime();
 
 private:
     // Regex para validaciones
