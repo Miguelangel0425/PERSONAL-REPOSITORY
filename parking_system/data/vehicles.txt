@@ -1,5 +1,4 @@
 EDS0432,Toyota
-ASD032,Nissan
 PQK302,Audi
 KLD032,Nissan
 PCF7679,Nissan
@@ -8,4 +7,5 @@ PQD0423,Toyota
 ASD302,Audi
 ASD0432,Nissan
 AQE043,Ferrari
-ASA1111,
+ASA1111,Unknown
+ADQ0324,NISSAN
