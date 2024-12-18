@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Ayuda - Sistema de Parqueaderos</title>
+</head>
+<body>
+    <h1>Manual de Ayuda</h1>
+
+    <p>Bienvenido al manual de usuario del <strong>Sistema de Parqueaderos</strong>. Este sistema le permite gestionar la información de los coches que ingresan al parqueadero de forma sencilla y eficiente.</p>
+
+    <h2>Funcionamiento del Sistema</h2>
+    <p>El sistema permite gestionar los datos de los coches en el parqueadero de manera sencilla. A continuación, se explica cómo funciona:</p>
+
+    <h3>1. Insertar Datos de un Coche</h3>
+    <p>Para registrar un coche en el parqueadero, el sistema le pedirá los siguientes datos:</p>
+    <ul>
+        <li><strong>Placa:</strong> El sistema le pedirá ingresar la placa del coche. Asegúrese de escribirla correctamente, siguiendo el formato adecuado.</li>
+        <li><strong>Marca:</strong> Ingrese la marca del coche.</li>
+        <li><strong>Color:</strong> Ingrese el color del coche.</li>
+        <li><strong>Modelo:</strong> Ingrese el modelo del coche.</li>
+    </ul>
+    <p>Una vez ingresados los datos, el sistema registrará el coche en el parqueadero. Si hay algún error con la placa (por ejemplo, si está mal escrita o no es válida), el sistema le pedirá que la ingrese nuevamente.</p>
+
+    <h3>Sintaxis de la Función de Inserción de Datos:</h3>
+    <p>La función que se utiliza para registrar un coche es la siguiente:</p>
+    <pre>
+        Coche InsertarDatos() {
+            placa = validador.ingresarPlaca(); 
+            marca = validaciones.ingresarString("Ingrese la marca: ");
+            color = validaciones.ingresarString("Ingrese el color: ");
+            modelo = validaciones.ingresarString("Ingrese el modelo: ");
+            return Coche(placa, modelo, color, marca);
+        }
+    </pre>
+    <p>Esto significa que el sistema le pedirá cada dato uno por uno, y luego creará un registro con todos los datos del coche.</p>
+
+    <h3>2. Validación de la Placa</h3>
+    <p>La placa del coche es muy importante, por lo que el sistema valida que esté escrita correctamente. Se asegura de que la placa tenga el formato adecuado, que contenga letras y números, y que la provincia sea válida.</p>
+    <p>Si la placa no es válida, el sistema le pedirá que la ingrese nuevamente.</p>
+
+    <h3>Ejemplo de Formato de Placa:</h3>
+    <p>El formato correcto de la placa es algo como: <strong>ABC1234</strong>. Las primeras letras representan la provincia, seguidas de cuatro números.</p>
+
+    <h3>3. Ingreso de Datos Adicionales</h3>
+    <p>Para ingresar otros datos, como la marca, color y modelo del coche, el sistema le permitirá escribirlos de manera sencilla, y puede borrar cualquier error utilizando la tecla de retroceso.</p>
+    <p>Una vez que todos los datos estén completos, el coche se registrará automáticamente en el parqueadero.</p>
+
+    <h3>4. Funciones Principales</h3>
+    <p>Las principales funciones del sistema son:</p>
+    <ul>
+        <li><strong>Registrar un coche:</strong> El sistema agrega un coche con la placa, marca, modelo y color proporcionados.</li>
+        <li><strong>Buscar un coche:</strong> Puede buscar un coche por su placa, y el sistema le mostrará la información del coche registrado.</li>
+        <li><strong>Eliminar un coche:</strong> Si un coche ya no está en el parqueadero, puede eliminarlo utilizando su placa.</li>
+    </ul>
+
+    <h2>Funcionamiento de los Backups con Cobian Reflector</h2>
+    <p>Para mantener la seguridad de sus datos y prevenir la pérdida de información valiosa, el sistema realiza automáticamente copias de seguridad de los archivos relacionados con el parqueadero. Esto incluye los archivos de texto donde se almacenan los datos de los coches registrados.</p>
+
+    <h3>1. ¿Qué Archivos se Respaldan?</h3>
+    <p>El sistema realiza copias de seguridad de los archivos .txt que contienen la información de los coches registrados en el parqueadero. Estos archivos son vitales para mantener la integridad de los datos, por lo que se respaldan de manera periódica.</p>
+
+    <h3>2. Selección de los Archivos para el Backup</h3>
+    <p>Cobian Reflector está configurado para seleccionar automáticamente los archivos relevantes del sistema. Los archivos de datos del parqueadero, típicamente almacenados con la extensión <code>.txt</code>, son los que se respaldan. Estos archivos pueden estar ubicados en la carpeta principal del sistema o en una subcarpeta designada para datos.</p>
+    <p>En el caso del sistema de parqueaderos, los archivos que contienen los registros de los coches se seleccionan automáticamente para ser respaldados, asegurando que siempre tenga una copia actualizada de los datos más recientes.</p>
+
+    <h3>3. ¿Cómo se Crean los Backups?</h3>
+    <p>El proceso de creación de backups con Cobian Reflector es automático. Cuando el sistema detecta que los archivos han cambiado o cuando se ha alcanzado el horario programado, Cobian Reflector comienza el proceso de copia de seguridad. Este proceso sigue estos pasos:</p>
+    <ol>
+        <li><strong>Identificación de Archivos:</strong> Cobian Reflector identifica los archivos de datos relevantes (en este caso, los archivos <code>.txt</code> con los registros de los coches).</li>
+        <li><strong>Creación del Backup:</strong> Una vez identificados los archivos, Cobian Reflector realiza una copia exacta de estos archivos. Si los archivos ya existen en la carpeta de destino, se pueden sobrescribir o agregar una nueva versión, dependiendo de cómo esté configurado el sistema.</li>
+        <li><strong>Almacenamiento del Backup:</strong> La copia de seguridad se guarda en una ubicación segura que puede ser una carpeta en el disco duro, una unidad externa o incluso en una carpeta de red. Esto asegura que los archivos estén accesibles si se necesita restaurar la información.</li>
+        <li><strong>Notificación:</strong> En algunos casos, Cobian Reflector puede enviar una notificación indicando que el proceso de copia de seguridad se ha completado correctamente.</li>
+    </ol>
+
+    <h3>4. ¿Dónde se Guardan los Backups?</h3>
+    <p>Los backups se guardan en una carpeta de destino que puede ser configurada durante la instalación del sistema. El destino más común es una carpeta local en su computadora, pero también puede configurar una unidad externa o una carpeta en red para almacenar las copias de seguridad, lo que proporciona una mayor seguridad ante fallos del sistema.</p>
+
+    <h3>5. ¿Qué Hacer en Caso de Necesitar Restaurar los Datos?</h3>
+    <p>Si alguna vez necesita recuperar la información de los coches registrados, simplemente abra Cobian Reflector, seleccione la tarea de backup correspondiente y elija la opción de restauración. El sistema reemplazará los archivos actuales con los datos de la copia de seguridad, asegurando que toda la información se recupere tal como estaba.</p>
+
+    <h3>6. Video Tutorial sobre Cómo Hacer Copias de Seguridad en Cobian Reflector</h3>
+    <p>Para una explicación más visual de cómo hacer copias de seguridad con Cobian Reflector, puede consultar el siguiente video tutorial:</p>
+    <p><a href="https://youtu.be/yOSFdqtzyYk" target="_blank">Ver tutorial sobre Cobian Reflector</a></p>
+
+    <h2>Conclusión</h2>
+    <p>Este manual le ayudará a gestionar su sistema de parqueadero de forma efectiva, así como a realizar backups de sus archivos .txt utilizando Cobian Reflector para garantizar la seguridad de sus datos. Si tiene alguna duda o necesita ayuda adicional, no dude en ponerse en contacto con el soporte técnico.</p>
+
+    <footer>
+        <p><strong>Desarrollado por:</strong> Mario Anrrango, Joffre Gomez e Iván Mantilla.</p>
+    </footer>
+</body>
+</html>

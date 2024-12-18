@@ -1,0 +1,16 @@
+DESCARGAR MSYS2 : https://www.msys2.org/
+EJECUTAR Y ESCRIBIR EN EL MSYS2 : 
+1) pacman-Syu
+2)pacman-Su
+3)pacman -S mingw-w64-x86_64-toolchain
+
+Localiza la carpeta de MinGW en MSYS2 normalmente esta en el disco Local C:
+localiza el bin y copia la dirección 
+Presiona Windows + S y busca "Configurar variables de entorno" o escribe environment variables o Path
+En la sección de Variables de sistema, selecciona la variable Path y haz clic en Editar.
+En la nueva ventana, haz clic en Nuevo y añade la ruta que copiaste
+
+abre VSC abre el proyecto y en un nuevo terminal copia 
+g++ main.cpp Coche.cpp Lista.h  Nodo.h menu.cpp Propietario.cpp ListaPropietarios.cpp Validaciones.cpp -o main.exe
+
+luego ./main.exe

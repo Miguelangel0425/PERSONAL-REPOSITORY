@@ -1,0 +1,12 @@
+Juan,Perez,1234567890,juan.perez@example.com,ABC1234,XYZ5678
+Maria,Gomez,0987654321,maria.gomez@example.com,LMN3456
+Carlos,Lopez,1122334455,carlos.lopez@example.com,OPQ6789
+Ana,Martinez,2233445566,ana.martinez@example.com,JKL1234
+Luis,Garcia,3344556677,luis.garcia@example.com,DEF4567,GHI8901
+Laura,Rodriguez,4455667788,laura.rodriguez@example.com,MNO2345
+Jose,Hernandez,5566778899,jose.hernandez@example.com,PQR6789
+Elena,Fernandez,6677889900,elena.fernandez@example.com,STU3456
+Miguel,Ramirez,7788990011,miguel.ramirez@example.com,VWX5678
+Sofia,Diaz,8899001122,sofia.diaz@example.com,YZA1234,BCD4567
+joffre,gomez,1728677574,jegomez6@gmail.com
+Mario,Anrrango,1726192618,mario_anrrango@hotmail.com,REM3012,RNO3436,RNO3436
