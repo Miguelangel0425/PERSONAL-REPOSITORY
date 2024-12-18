@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Wed Dec 11 11:51:00 2024
+# Make data base, printed on Fri Dec 13 07:09:01 2024
 
 # Variables
 
@@ -16,16 +16,16 @@ SYSTEMDRIVE = C:
 # environment
 LC_ALL = C
 # environment
-USERPROFILE = C:\Users\H305 M12
-# environment
-LOCALAPPDATA = C:\Users\H305 M12\AppData\Local
+USERPROFILE = C:\Users\Labs-G300
  
+# environment
+LOCALAPPDATA = C:\Users\Labs-G300\AppData\Local
 # makefile (from 'Makefile', line 6)
 SRC_DIR = src
 # environment
 VSCODE_CRASH_REPORTER_PROCESS_TYPE = extensionHost
 # environment
-VSCODE_CWD = C:\Users\H305 M12\AppData\Local\Programs\Microsoft VS Code
+VSCODE_CWD = C:\Users\Labs-G300\AppData\Local\Programs\Microsoft VS Code
 # environment
 SYSTEMROOT = C:\Windows
 # environment
@@ -37,7 +37,7 @@ MAKE_COMMAND := make
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_4732_YKHOGGLPDXDJNSNJ
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_10120_CKTWUIBYJPVROQGW
 # makefile (from 'Makefile', line 7)
 INCLUDE_DIR = include
 # environment
@@ -51,7 +51,7 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\H305 M12\AppData\Roaming\Code\CachedData\f1a4fb101478ce6ec82fe9627c43efbf9e98c813
+VSCODE_CODE_CACHE_PATH = C:\Users\Labs-G300\AppData\Roaming\Code\CachedData\f1a4fb101478ce6ec82fe9627c43efbf9e98c813
 # makefile (from 'Makefile', line 9)
 DATA_DIR = data
 # environment
@@ -59,19 +59,17 @@ LANG = C
 # default
 .LOADED := 
 # environment
-TMP = /c/Users/H305M1~1/AppData/Local/Temp
+TMP = /c/Users/LABS-G~1/AppData/Local/Temp
 # default
 .INCLUDE_DIRS := /usr/include
 # makefile
 MAKEFLAGS = pqrR
 # environment
-ONEDRIVE = C:\Users\H305 M12\OneDrive
+ONEDRIVE = C:\Users\Labs-G300\OneDrive
 # makefile
-CURDIR := /c/Users/H305 M12/Documents/PERSONAL-REPOSITORY/parking_system
+CURDIR := /c/Users/Labs-G300/Documents/PERSONAL-REPOSITORY/parking_system
 # environment
-EFC_10068 = 1
-# environment
-VSCODE_L10N_BUNDLE_LOCATION = 
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
@@ -81,7 +79,7 @@ MFLAGS = -pqrR
 # default
 .SHELLFLAGS := -c
 # environment
-!C: = c:\Users\H305 M12\Documents\PERSONAL-REPOSITORY\parking_system
+!C: = c:\Users\Labs-G300\Documents\PERSONAL-REPOSITORY\parking_system
 # environment
 COMMONPROGRAMW6432 = C:\Program Files\Common Files
 # automatic
@@ -91,7 +89,7 @@ MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 4732
+VSCODE_PID = 10120
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
@@ -101,7 +99,7 @@ VSCODE_PID = 4732
 # makefile (from 'Makefile', line 16)
 EXEC = parking_system
 # environment
-VSCODE_NLS_CONFIG = {"userLocale":"en-us","osLocale":"es-es","resolvedLanguage":"en","defaultMessagesFile":"C:\\Users\\H305 M12\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\nls.messages.json","locale":"en-us","availableLanguages":{}}
+VSCODE_NLS_CONFIG = {"userLocale":"en-us","osLocale":"es-es","resolvedLanguage":"en","defaultMessagesFile":"C:\\Users\\Labs-G300\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\out\\nls.messages.json","locale":"en-us","availableLanguages":{}}
 # default
 MAKE_HOST := x86_64-pc-msys
 # environment
@@ -109,7 +107,7 @@ PROGRAMDATA = C:\ProgramData
 # default
 SHELL := /bin/sh
 # environment
-HOMEPATH = \Users\H305 M12
+HOMEPATH = \Users\Labs-G300
 # default
 MAKECMDGOALS := all
 # environment
@@ -123,11 +121,9 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = /c/Program Files (x86)/Common Files/Oracle/Java/java8path:/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Windows/System32/OpenSSH:/c/Program Files/PuTTY:/c/Program Files/MATLAB/R2024a/bin:/c/Program Files/Git/cmd:/mingw64/bin:/usr/bin:/mingw64/bin:/usr/bin:/mingw64/bin:/c/Program Files (x86)/Graphviz/bin:/c/Program Files/Java/jre1.8.0_431/bin:/c/Users/H305 M12/.console-ninja/.bin:/c/Users/H305 M12/AppData/Local/Programs/Python/Python312/Scripts:/c/Users/H305 M12/AppData/Local/Programs/Python/Python312:/c/Users/H305 M12/AppData/Local/Microsoft/WindowsApps:/c/Users/H305 M12/AppData/Local/Programs/Microsoft VS Code/bin
+PATH = /c/Program Files/Common Files/Oracle/Java/javapath:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Windows/System32/OpenSSH:/c/Program Files/Git/cmd:/mingw64/bin:/c/Program Files/dotnet:/c/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit:/usr/bin:/mingw64/bin:/usr/bin:/mingw64/bin:/c/Users/Labs-G300/AppData/Local/Microsoft/WindowsApps:/c/Users/Labs-G300/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/Labs-G300/.dotnet/tools
 # environment
-ZES_ENABLE_SYSMAN = 1
-# environment
-COMPUTERNAME = H305M12
+COMPUTERNAME = DESKTOP-H8KE6V1
 # default
 MAKEFILES := 
 # automatic
@@ -135,9 +131,9 @@ MAKEFILES :=
 # environment
 PROMPT = $P$G
 # environment
-LOGONSERVER = \\H305M12
+LOGONSERVER = \\DESKTOP-H8KE6V1
 # environment
-USERNAME = H305 M12
+USERNAME = Laboratorios DCCO
 # environment
 COMMONPROGRAMFILES = C:\Program Files\Common Files
 # automatic
@@ -153,7 +149,7 @@ ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # makefile (from 'Makefile', line 13)
 OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SOURCES))
 # environment
-USERDOMAIN = H305M12
+USERDOMAIN = DESKTOP-H8KE6V1
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
@@ -167,29 +163,31 @@ PROGRAMFILES(X86) = C:\Program Files (x86)
 # makefile (from 'Makefile', line 3)
 LDFLAGS = 
 # environment
-USERDOMAIN_ROAMINGPROFILE = H305M12
+USERDOMAIN_ROAMINGPROFILE = DESKTOP-H8KE6V1
 # environment
-NUMBER_OF_PROCESSORS = 20
+NUMBER_OF_PROCESSORS = 4
 # environment
 PUBLIC = C:\Users\Public
 # environment
-APPDATA = C:\Users\H305 M12\AppData\Roaming
+APPDATA = C:\Users\Labs-G300\AppData\Roaming
 # environment
 HOMEDRIVE = C:
+# environment
+EFC_9868 = 1
 # environment
 PROCESSOR_ARCHITECTURE = AMD64
 # makefile (from 'Makefile', line 8)
 BUILD_DIR = build
 # environment
-HOME = /home/H305 M12
+HOME = /home/Laboratorios DCCO
 # environment
 COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-TEMP = /c/Users/H305M1~1/AppData/Local/Temp
+TEMP = /c/Users/LABS-G~1/AppData/Local/Temp
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\80016f0c-1.95.3-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\05479bbe-1.95.3-main-sock
 # environment
 TERM = xterm-256color
 # default
@@ -207,7 +205,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs notintermediate shell-export archives jobserver output-sync check-symlink load dospaths
 # environment
-PROCESSOR_REVISION = 9702
+PROCESSOR_REVISION = 2505
 # makefile (from 'Makefile', line 1)
 CXX = g++
 # makefile (from 'Makefile', line 12)
@@ -215,10 +213,10 @@ SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 # environment
 VSCODE_ESM_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
-PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 151 Stepping 2, GenuineIntel
+PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 37 Stepping 5, GenuineIntel
 # variable set hash-table stats:
  
-# Load=102/1024=10%, Rehash=0, Collisions=15/146=10%
+# Load=101/1024=10%, Rehash=0, Collisions=14/145=10%
 
 # Pattern-specific Variable Values
 
@@ -226,14 +224,14 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 151 Stepping 2, GenuineIntel
 
 # Directories
 
-# src (device 2060306646, inode 3659174697481003): 9 files, no impossibilities.
-# . (device 2060306646, inode 2814749767348077): 11 files, no impossibilities.
+# src (device 3601132067, inode 844424930761938): 9 files, no impossibilities.
+# . (device 3601132067, inode 1407374884183232): 11 files, no impossibilities.
 
 # 20 files, no impossibilities in 2 directories.
 
+ 
 # Implicit Rules
 
- 
 build/%.o: src/%.cpp
 #  recipe to execute (from 'Makefile', line 34):
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -243,7 +241,7 @@ build/%.o: src/%.cpp
 
 parking_system: build/cipher.o build/history_manager.o build/input_validator.o build/main.o build/parking_manager.o build/token_manager.o build/vehicle.o
 #  Implicit rule search has not been done.
-#  Last modified 2024-12-11 11:38:30.9546454
+#  Last modified 2024-12-13 07:08:37.6954918
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
@@ -255,7 +253,7 @@ parking_system: build/cipher.o build/history_manager.o build/input_validator.o b
 src/cipher.cpp:
 #  Implicit rule search has been done.
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:07:55.8391957
+#  Last modified 2024-12-09 07:15:00.2365456
 #  File has been updated.
 #  Successfully updated.
 
@@ -263,23 +261,7 @@ src/cipher.cpp:
 Makefile:
 #  Implicit rule search has been done.
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:07:55.8079455
-#  File has been updated.
-#  Successfully updated.
-
-# Not a target:
-src/parking_manager.cpp:
-#  Implicit rule search has been done.
-#  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:45:19.7626501
-#  File has been updated.
-#  Successfully updated.
-
-# Not a target:
-src/main.cpp:
-#  Implicit rule search has been done.
-#  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:07:55.8391957
+#  Last modified 2024-12-09 07:15:00.1428025
 #  File has been updated.
 #  Successfully updated.
 
@@ -301,7 +283,7 @@ build/cipher.o: src/cipher.cpp
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: 'cipher'
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:38:25.8020463
+#  Last modified 2024-12-13 07:08:37.4255082
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 34):
@@ -317,7 +299,7 @@ build/token_manager.o:
 src/input_validator.cpp:
 #  Implicit rule search has been done.
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:17:18.0065134
+#  Last modified 2024-12-13 07:08:37.6994923
 #  File has been updated.
 #  Successfully updated.
 
@@ -340,7 +322,7 @@ all: build data parking_system
 build:
 #  Implicit rule search has not been done.
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:38:30.7975572
+#  Last modified 2024-12-13 07:08:37.6654927
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 23):
@@ -349,7 +331,7 @@ build:
 data:
 #  Implicit rule search has not been done.
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:07:55.8235704
+#  Last modified 2024-12-13 07:08:37.6784927
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 26):
@@ -358,34 +340,23 @@ data:
 build/input_validator.o: src/input_validator.cpp
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: 'input_validator'
-#  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:38:28.4381807
-#  File has been updated.
-#  Successfully updated.
-#  recipe to execute (from 'Makefile', line 34):
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-build/parking_manager.o: src/parking_manager.cpp
- 
-#  Implicit rule search has been done.
-#  Implicit/static pattern stem: 'parking_manager'
-#  Last modified 2024-12-11 11:38:29.9881821
+#  Last modified 2024-12-13 07:08:37.5715
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # automatic
-# @ := build/parking_manager.o
+# @ := build/input_validator.o
 # automatic
-# * := parking_manager
+# * := input_validator
 # automatic
-# < := src/parking_manager.cpp
+# < := src/input_validator.cpp
 # automatic
-# + := src/parking_manager.cpp
+# + := src/input_validator.cpp
 # automatic
 # % := 
 # automatic
-# ^ := src/parking_manager.cpp
+# ^ := src/input_validator.cpp
 # automatic
-# ? := src/parking_manager.cpp
+# ? := src/input_validator.cpp
 # automatic
 # | := 
 # variable set hash-table stats:
@@ -394,22 +365,24 @@ build/parking_manager.o: src/parking_manager.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Not a target:
+build/parking_manager.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 src/history_manager.cpp:
 #  Implicit rule search has been done.
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:07:55.8391957
+#  Last modified 2024-12-09 07:15:00.2365456
 #  File has been updated.
 #  Successfully updated.
 
-build/main.o: src/main.cpp
-#  Implicit rule search has been done.
-#  Implicit/static pattern stem: 'main'
-#  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:38:28.9715985
-#  File has been updated.
-#  Successfully updated.
-#  recipe to execute (from 'Makefile', line 34):
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# Not a target:
+build/main.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 .PHONY: all clean
 #  Implicit rule search has not been done.
@@ -420,26 +393,26 @@ build/history_manager.o: src/history_manager.cpp
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: 'history_manager'
 #  File is secondary (prerequisite of .SECONDARY).
-#  Last modified 2024-12-11 11:38:26.3882343
+#  Last modified 2024-12-13 07:08:37.5504995
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 34):
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # files hash-table stats:
-# Load=21/1024=2%, Rehash=0, Collisions=0/63=0%
+# Load=19/1024=2%, Rehash=0, Collisions=0/55=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 44 / storage = 610 B / avg = 13 B
-# current buf: size = 8162 B / used = 610 B / count = 44 / avg = 13 B
+# strcache buffers: 1 (0) / strings = 40 / storage = 552 B / avg = 13 B
+# current buf: size = 8162 B / used = 552 B / count = 40 / avg = 13 B
 
-# strcache performance: lookups = 69 / hit rate = 36%
+# strcache performance: lookups = 63 / hit rate = 36%
 # hash-table stats:
-# Load=44/8192=1%, Rehash=0, Collisions=0/69=0%
-# Finished Make data base on Wed Dec 11 11:51:00 2024
+# Load=40/8192=0%, Rehash=0, Collisions=0/63=0%
+# Finished Make data base on Fri Dec 13 07:09:04 2024
 
  
