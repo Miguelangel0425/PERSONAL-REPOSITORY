@@ -37,33 +37,10 @@ int main() {
             std::cout << "No se encontraron datos guardados o error al cargar: " << e.what() << std::endl;
             std::cout << "Creando nueva red social." << std::endl;
             
-            // Crear algunos usuarios de prueba
-            socialNetwork.addUser("admin", "admin123");
-            socialNetwork.addUser("test", "test123");
-            socialNetwork.addUser("demo", "demo123");
-            
-            // Verificar que los hashes se crearon correctamente
-            std::cout << "Hash de 'admin123': " << hashPassword("admin123") << std::endl;
-            std::cout << "Hash almacenado para 'admin': " << socialNetwork.getUserHashedPassword("admin") << std::endl;
-            
-            // Agregar algunas conexiones de prueba
-            socialNetwork.addConnection("admin", "test");
-            socialNetwork.addConnection("test", "demo");
-            
-            // Agregar algunas publicaciones de prueba
-            socialNetwork.addPost("admin", "¡Bienvenidos a la red social!");
-            socialNetwork.addPost("test", "¡Hola mundo!");
-            socialNetwork.addPost("demo", "Mi primera publicación");
         }
         
         // Inicializar y ejecutar la GUI
         GUI gui(socialNetwork);
-        
-        std::cout << "Iniciando aplicacion..." << std::endl;
-        std::cout << "Usuarios de prueba disponibles:" << std::endl;
-        std::cout << "Usuario: admin, Contraseña: admin123" << std::endl;
-        std::cout << "Usuario: test, Contraseña: test123" << std::endl;
-        std::cout << "Usuario: demo, Contraseña: demo123" << std::endl;
         
         // Ejecutar la aplicación
         gui.run();

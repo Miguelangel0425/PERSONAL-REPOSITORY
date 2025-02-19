@@ -1,17 +1,20 @@
 #include "GUI.h"
 #include <iostream>
 
+#include "GUI.h"
+#include <iostream>
+
 GUI::GUI(SocialGraph& network)
-    :window(sf::VideoMode(800,600), "Red Social"),
+    : window(sf::VideoMode(800,600), "Red Social"),
     socialNetwork(network),
     isLoggedIn(false),
     isRegistering(false),
+    loginFailed(false),
+    registrationFailed(false),
     isEnteringUsername(false),
     isEnteringPassword(false),
     isEnteringConfirmPassword(false),
-    isEnteringPost(false),
-    loginFailed(false),
-    registrationFailed(false){
+    isEnteringPost(false) {  // Fixed initialization order to match declaration order
         if(!font.loadFromFile("arial.ttf")){
             std::cerr << "Error al cargar la fuente" << std::endl;
         }
@@ -34,7 +37,7 @@ GUI::GUI(SocialGraph& network)
         statusText.setPosition(300, 350);
         
         initializeButtons();
-    }
+}
 
 void GUI::initializeButtons() {
         // Configurar botón de login
@@ -136,7 +139,7 @@ void GUI::attemptLogin() {
     
     if (!currentInputUsername.empty() && !currentInputPassword.empty()) {
         if (socialNetwork.verifyPassword(currentInputUsername, currentInputPassword)) {
-            std::cout << "Verificación exitosa para " << currentInputUsername << std::endl;
+            std::cout << "Verificacion exitosa para " << currentInputUsername << std::endl;
             isLoggedIn = true;
             currentUser = currentInputUsername;
             clearInputStates();
@@ -145,13 +148,13 @@ void GUI::attemptLogin() {
             loginFailed = false;
             statusText.setString("");
         } else {
-            std::cout << "Verificación fallida para " << currentInputUsername << std::endl;
+            std::cout << "Verificacion fallida para " << currentInputUsername << std::endl;
             loginFailed = true;
             errorTimer.restart();
             statusText.setString("Credenciales incorrectas");
         }
     } else {
-        std::cout << "Usuario o contraseña vacíos" << std::endl;
+        std::cout << "Usuario o contrasena vacios" << std::endl;
         loginFailed = true;
         errorTimer.restart();
         statusText.setString("Por favor ingrese usuario y contrasena");
@@ -161,13 +164,25 @@ void GUI::attemptLogin() {
 void GUI::attemptRegister() {
     std::cout << "Intentando registrar usuario: '" << currentInputUsername << "'" << std::endl;
     
-    if (currentInputUsername.empty() || currentInputPassword.empty() || currentInputConfirmPassword.empty()) {
+    // Validar username
+    auto usernameValidation = validateUsername(currentInputUsername);
+    if (!usernameValidation.isValid) {
         registrationFailed = true;
         errorTimer.restart();
-        statusText.setString("Todos los campos son obligatorios");
+        statusText.setString(usernameValidation.message);
         return;
     }
     
+    // Validar password
+    auto passwordValidation = validatePassword(currentInputPassword);
+    if (!passwordValidation.isValid) {
+        registrationFailed = true;
+        errorTimer.restart();
+        statusText.setString(passwordValidation.message);
+        return;
+    }
+    
+    // Verificar que las contraseñas coincidan
     if (currentInputPassword != currentInputConfirmPassword) {
         registrationFailed = true;
         errorTimer.restart();
@@ -175,6 +190,7 @@ void GUI::attemptRegister() {
         return;
     }
     
+    // Verificar si el usuario ya existe
     if (socialNetwork.userExists(currentInputUsername)) {
         registrationFailed = true;
         errorTimer.restart();
@@ -186,7 +202,7 @@ void GUI::attemptRegister() {
     if (socialNetwork.addUser(currentInputUsername, currentInputPassword)) {
         std::cout << "Usuario " << currentInputUsername << " registrado exitosamente" << std::endl;
         
-        // Guardar los datos de inmediato
+        // Guardar los datos
         try {
             socialNetwork.saveToFile("social_network.json");
             std::cout << "Datos guardados tras registro" << std::endl;
@@ -194,7 +210,6 @@ void GUI::attemptRegister() {
             std::cerr << "Error al guardar tras registro: " << e.what() << std::endl;
         }
         
-        // Volver a pantalla de login
         isRegistering = false;
         clearInputStates();
         currentInputUsername.clear();
@@ -211,6 +226,7 @@ void GUI::attemptRegister() {
 
 void GUI::handleLoginEvents(sf::Event& event) {
     if (event.type == sf::Event::TextEntered) {
+        // Manejar entrada de caracteres
         if (event.text.unicode == '\t') {  // Tab key
             if (isEnteringUsername) {
                 isEnteringUsername = false;
@@ -221,7 +237,6 @@ void GUI::handleLoginEvents(sf::Event& event) {
             }
         }
         else if (event.text.unicode == '\r' || event.text.unicode == '\n') {  // Enter key
-            // Intentar login
             attemptLogin();
         }
         else if (event.text.unicode == '\b') {  // Backspace
@@ -232,7 +247,7 @@ void GUI::handleLoginEvents(sf::Event& event) {
                 currentInputPassword.pop_back();
             }
         }
-        else if (event.text.unicode >= 32) {  // Cualquier carácter imprimible
+        else if (event.text.unicode >= 32 && event.text.unicode < 128) {  // Caracteres ASCII imprimibles
             if (isEnteringUsername) {
                 currentInputUsername += static_cast<char>(event.text.unicode);
             }
@@ -245,33 +260,53 @@ void GUI::handleLoginEvents(sf::Event& event) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         
         // Click en caja de usuario
-        sf::FloatRect usernameBounds(300, 200, 200, 30);
+        sf::FloatRect usernameBounds = inputBox.getGlobalBounds();
+        usernameBounds.left = 275;
+        usernameBounds.top = 220;
+        usernameBounds.width = 250;
+        usernameBounds.height = 40;
+        
         if (usernameBounds.contains(mousePos.x, mousePos.y)) {
             isEnteringUsername = true;
             isEnteringPassword = false;
+            std::cout << "Click en campo de usuario" << std::endl;
         }
         
         // Click en caja de contraseña
-        sf::FloatRect passwordBounds(300, 250, 200, 30);
+        sf::FloatRect passwordBounds = inputBox.getGlobalBounds();
+        passwordBounds.left = 275;
+        passwordBounds.top = 270;
+        passwordBounds.width = 250;
+        passwordBounds.height = 40;
+        
         if (passwordBounds.contains(mousePos.x, mousePos.y)) {
             isEnteringPassword = true;
             isEnteringUsername = false;
+            std::cout << "Click en campo de contraseña" << std::endl;
         }
         
-        // Click en botón de login
+        // Click fuera de las cajas de texto
+        if (!usernameBounds.contains(mousePos.x, mousePos.y) && 
+            !passwordBounds.contains(mousePos.x, mousePos.y)) {
+            // No desactivar la entrada de texto si se hace clic en los botones
+            if (!isMouseOverButton(loginButton, mousePos) && 
+                !isMouseOverButton(registerButton, mousePos)) {
+                isEnteringUsername = false;
+                isEnteringPassword = false;
+            }
+        }
+        
+        // Click en botones
         if (isMouseOverButton(loginButton, mousePos)) {
-            std::cout << "Botón de login presionado" << std::endl;
+            std::cout << "Boton de login presionado" << std::endl;
             attemptLogin();
         }
-        
-        // Click en botón de registro
-        if (isMouseOverButton(registerButton, mousePos)) {
-            std::cout << "Botón de registro presionado" << std::endl;
+        else if (isMouseOverButton(registerButton, mousePos)) {
+            std::cout << "Boton de registro presionado" << std::endl;
             isRegistering = true;
             clearInputStates();
             currentInputUsername.clear();
             currentInputPassword.clear();
-            currentInputConfirmPassword.clear();
             loginFailed = false;
             statusText.setString("");
         }
@@ -370,9 +405,16 @@ void GUI::handleMainScreenEvents(sf::Event& event) {
     if (event.type == sf::Event::TextEntered) {
         if (event.text.unicode == '\r' || event.text.unicode == '\n') {  // Enter key
             if (isEnteringPost && !currentInputPost.empty()) {
-                socialNetwork.addPost(currentUser, currentInputPost);
-                currentInputPost.clear();
-                isEnteringPost = false;
+                auto postValidation = validatePost(currentInputPost);
+                if (postValidation.isValid) {
+                    socialNetwork.addPost(currentUser, currentInputPost);
+                    currentInputPost.clear();
+                    isEnteringPost = false;
+                    statusText.setString("");
+                } else {
+                    statusText.setString(postValidation.message);
+                    errorTimer.restart();
+                }
             }
         }
         else if (event.text.unicode == '\b') {  // Backspace
@@ -380,9 +422,14 @@ void GUI::handleMainScreenEvents(sf::Event& event) {
                 currentInputPost.pop_back();
             }
         }
-        else if (event.text.unicode < 1024) {  // Caracteres ASCII
+        else if (event.text.unicode < 1024) {  // Caracteres válidos
             if (isEnteringPost) {
-                currentInputPost += static_cast<char>(event.text.unicode);
+                if (currentInputPost.length() < MAX_POST_LENGTH) {
+                    currentInputPost += static_cast<char>(event.text.unicode);
+                } else {
+                    statusText.setString("Has alcanzado el limite de caracteres");
+                    errorTimer.restart();
+                }
             }
         }
     }
@@ -391,7 +438,22 @@ void GUI::handleMainScreenEvents(sf::Event& event) {
         
         // Click en botón de post
         if (isMouseOverButton(postButton, mousePos)) {
-            isEnteringPost = !isEnteringPost;
+            if (!isEnteringPost) {
+                isEnteringPost = true;
+                currentInputPost.clear();
+                statusText.setString("");
+            } else {
+                auto postValidation = validatePost(currentInputPost);
+                if (postValidation.isValid) {
+                    socialNetwork.addPost(currentUser, currentInputPost);
+                    currentInputPost.clear();
+                    isEnteringPost = false;
+                    statusText.setString("");
+                } else {
+                    statusText.setString(postValidation.message);
+                    errorTimer.restart();
+                }
+            }
         }
         
         // Click en botón de logout
@@ -402,9 +464,11 @@ void GUI::handleMainScreenEvents(sf::Event& event) {
             // Guardar al cerrar sesión
             try {
                 socialNetwork.saveToFile("social_network.json");
-                std::cout << "Datos guardados al cerrar sesión" << std::endl;
+                std::cout << "Datos guardados al cerrar sesion" << std::endl;
             } catch (const std::exception& e) {
-                std::cerr << "Error al guardar al cerrar sesión: " << e.what() << std::endl;
+                std::cerr << "Error al guardar al cerrar sesion: " << e.what() << std::endl;
+                statusText.setString("Error al guardar los datos");
+                errorTimer.restart();
             }
         }
         
@@ -414,64 +478,214 @@ void GUI::handleMainScreenEvents(sf::Event& event) {
         for (const auto& friend_name : friends) {
             sf::FloatRect friendBounds(500, yPos, 200, 30);
             if (friendBounds.contains(mousePos.x, mousePos.y)) {
-                // Mostrar perfil del amigo o realizar alguna acción
-                // Por ejemplo, podríamos cambiar a una vista del perfil del amigo
+                // Aquí se podría implementar la funcionalidad de ver perfil de amigo
+                std::cout << "Click en amigo: " << friend_name << std::endl;
             }
-            yPos += 30;
+            yPos += 50;  // Mismo espaciado que en drawFriendCard
+        }
+        
+        // Click fuera del área de post cancela la entrada
+        if (isEnteringPost) {
+            sf::FloatRect postArea(40, 150, 400, 60);
+            if (!postArea.contains(mousePos.x, mousePos.y) && 
+                !isMouseOverButton(postButton, mousePos)) {
+                isEnteringPost = false;
+                if (currentInputPost.empty()) {
+                    statusText.setString("");
+                }
+            }
         }
     }
 }
 
 void GUI::drawLoginScreen() {
-    window.clear(sf::Color(100, 100, 200));
+    window.clear(BACKGROUND_COLOR);
     
-    titleText.setString("Iniciar Sesion");
-    titleText.setPosition(300, 100);
+    // Título principal
+    titleText.setString("Red Social");
+    titleText.setCharacterSize(32);
+    titleText.setFillColor(TEXT_COLOR);
+    sf::FloatRect titleBounds = titleText.getLocalBounds();
+    titleText.setPosition((800 - titleBounds.width) / 2, 50);
     window.draw(titleText);
     
-    // Caja de usuario
-    inputBox.setPosition(300, 200);
-    window.draw(inputBox);
+    // Card de login
+    createCardBackground(250, 150, 300, 300);
+    window.draw(cardBackground);
     
-    // Texto de usuario
-    inputText.setString(currentInputUsername.empty() && !isEnteringUsername ? "Usuario" : currentInputUsername);
-    inputText.setPosition(310, 205);
-    window.draw(inputText);
+    // Subtítulo
+    titleText.setString("Iniciar Sesion");
+    titleText.setCharacterSize(24);
+    titleBounds = titleText.getLocalBounds();
+    titleText.setPosition((800 - titleBounds.width) / 2, 170);
+    window.draw(titleText);
     
-    // Caja de contraseña
-    inputBox.setPosition(300, 250);
-    window.draw(inputBox);
+    // Campos de entrada
+    inputBox.setSize(sf::Vector2f(250, 40));
+    inputBox.setFillColor(INPUT_BACKGROUND);
+    inputBox.setOutlineColor(sf::Color(100, 100, 100));
+    inputBox.setOutlineThickness(1);
     
-    // Texto de contraseña (mostrar asteriscos)
-    std::string passwordDisplay;
-    if (currentInputPassword.empty() && !isEnteringPassword) {
-        passwordDisplay = "Contrasena";
+    // Campo de usuario
+    inputBox.setPosition(275, 220);
+    if (isEnteringUsername) {
+        inputBox.setOutlineColor(PRIMARY_COLOR);
     } else {
-        passwordDisplay = std::string(currentInputPassword.length(), '*');
+        inputBox.setOutlineColor(sf::Color(100, 100, 100));
     }
-    inputText.setString(passwordDisplay);
-    inputText.setPosition(310, 255);
+    window.draw(inputBox);
+    
+    inputText.setFillColor(TEXT_COLOR);
+    if (currentInputUsername.empty() && !isEnteringUsername) {
+        inputText.setString("Usuario");
+        inputText.setFillColor(sf::Color(150, 150, 150)); // Color más claro para placeholder
+    } else {
+        inputText.setString(currentInputUsername);
+        inputText.setFillColor(TEXT_COLOR);
+    }
+    inputText.setPosition(285, 230);
     window.draw(inputText);
     
-    // Botón de login
+    // Campo de contraseña
+    inputBox.setPosition(275, 270);
+    if (isEnteringPassword) {
+        inputBox.setOutlineColor(PRIMARY_COLOR);
+    } else {
+        inputBox.setOutlineColor(sf::Color(100, 100, 100));
+    }
+    window.draw(inputBox);
+    
+    if (currentInputPassword.empty() && !isEnteringPassword) {
+        inputText.setString("Contrasena");
+        inputText.setFillColor(sf::Color(150, 150, 150)); // Color más claro para placeholder
+    } else {
+        inputText.setString(std::string(currentInputPassword.length(), '*'));
+        inputText.setFillColor(TEXT_COLOR);
+    }
+    inputText.setPosition(285, 280);
+    window.draw(inputText);
+    
+    // Botones
+    loginButton.setPosition(275, 330);
+    loginButton.setSize(sf::Vector2f(250, 40));
+    registerButton.setPosition(275, 380);
+    registerButton.setSize(sf::Vector2f(250, 40));
+    
+    styleButton(loginButton, loginButtonText, "Iniciar Sesion");
+    styleButton(registerButton, registerButtonText, "Registrarse");
+    
+    // Efectos hover
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    if (isMouseOverButton(loginButton, mousePos)) {
+        loginButton.setFillColor(BUTTON_HOVER_COLOR);
+    }
+    if (isMouseOverButton(registerButton, mousePos)) {
+        registerButton.setFillColor(BUTTON_HOVER_COLOR);
+    }
+    
     window.draw(loginButton);
     window.draw(loginButtonText);
-    
-    // Botón de registro
     window.draw(registerButton);
     window.draw(registerButtonText);
     
-    // Mostrar mensajes de error si corresponde
-    if (loginFailed) {
-        if (errorTimer.getElapsedTime().asSeconds() < 3.0) {
-            window.draw(statusText);
-        } else {
-            loginFailed = false;
-            statusText.setString("");
-        }
+    // Mensaje de error
+    if (loginFailed && errorTimer.getElapsedTime().asSeconds() < 3.0) {
+        statusText.setFillColor(sf::Color::Red);
+        sf::FloatRect errorBounds = statusText.getLocalBounds();
+        statusText.setPosition((800 - errorBounds.width) / 2, 430);
+        window.draw(statusText);
     }
     
     window.display();
+}
+
+ValidationResult GUI::validateUsername(const std::string& username) {
+    // Verificar longitud
+    if (username.length() < MIN_USERNAME_LENGTH) {
+        return ValidationResult(false, "El usuario debe tener al menos " + 
+                              std::to_string(MIN_USERNAME_LENGTH) + " caracteres");
+    }
+    if (username.length() > MAX_USERNAME_LENGTH) {
+        return ValidationResult(false, "El usuario no puede exceder " + 
+                              std::to_string(MAX_USERNAME_LENGTH) + " caracteres");
+    }
+
+    // Verificar caracteres válidos
+    if (containsInvalidChars(username)) {
+        return ValidationResult(false, "El usuario solo puede contener letras, numeros y guiones bajos");
+    }
+
+    // Verificar que el primer carácter sea una letra
+    if (!std::isalpha(username[0])) {
+        return ValidationResult(false, "El usuario debe comenzar con una letra");
+    }
+
+    return ValidationResult(true, "");
+}
+
+ValidationResult GUI::validatePassword(const std::string& password) {
+    // Verificar longitud
+    if (password.length() < MIN_PASSWORD_LENGTH) {
+        return ValidationResult(false, "La contrasena debe tener al menos " + 
+                              std::to_string(MIN_PASSWORD_LENGTH) + " caracteres");
+    }
+    if (password.length() > MAX_PASSWORD_LENGTH) {
+        return ValidationResult(false, "La contrasena no puede exceder " + 
+                              std::to_string(MAX_PASSWORD_LENGTH) + " caracteres");
+    }
+
+    // Verificar complejidad
+    bool hasUpper = false;
+    bool hasLower = false;
+    bool hasDigit = false;
+    bool hasSpecial = false;
+    const std::string specialChars = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+    for (char c : password) {
+        if (std::isupper(c)) hasUpper = true;
+        else if (std::islower(c)) hasLower = true;
+        else if (std::isdigit(c)) hasDigit = true;
+        else if (specialChars.find(c) != std::string::npos) hasSpecial = true;
+    }
+
+    std::string requirements;
+    if (!hasUpper) requirements += "- Debe contener al menos una mayuscula\n";
+    if (!hasLower) requirements += "- Debe contener al menos una minuscula\n";
+    if (!hasDigit) requirements += "- Debe contener al menos un numero\n";
+    if (!hasSpecial) requirements += "- Debe contener al menos un caracter especial\n";
+
+    if (!requirements.empty()) {
+        return ValidationResult(false, "La contraseña debe cumplir los siguientes requisitos:\n" + requirements);
+    }
+
+    return ValidationResult(true, "");
+}
+
+ValidationResult GUI::validatePost(const std::string& post) {
+    // Verificar longitud
+    if (post.empty()) {
+        return ValidationResult(false, "La publicacion no puede estar vacia");
+    }
+    if (post.length() > MAX_POST_LENGTH) {
+        return ValidationResult(false, "La publicacion no puede exceder " + 
+                              std::to_string(MAX_POST_LENGTH) + " caracteres");
+    }
+
+    // Verificar contenido inapropiado (ejemplo básico)
+    std::vector<std::string> inappropriateWords = {"palabrota1", "palabrota2", "palabrota3"};
+    for (const auto& word : inappropriateWords) {
+        if (post.find(word) != std::string::npos) {
+            return ValidationResult(false, "La publicacion contiene contenido inapropiado");
+        }
+    }
+
+    return ValidationResult(true, "");
+}
+
+bool GUI::containsInvalidChars(const std::string& str) {
+    return std::any_of(str.begin(), str.end(), [](char c) {
+        return !(std::isalnum(c) || c == '_');
+    });
 }
 
 void GUI::drawRegistrationScreen() {
@@ -542,31 +756,80 @@ void GUI::drawRegistrationScreen() {
 }
 
 void GUI::drawMainScreen() {
-    window.clear(sf::Color(100, 100, 200));
+    window.clear(BACKGROUND_COLOR);
     
+    // Header
+    sf::RectangleShape header;
+    header.setSize(sf::Vector2f(800, 80));
+    header.setFillColor(PRIMARY_COLOR);
+    window.draw(header);
+    
+    // Título de bienvenida
     titleText.setString("Bienvenido " + currentUser);
-    titleText.setPosition(300, 50);
+    titleText.setCharacterSize(24);
+    titleText.setFillColor(TEXT_COLOR);
+    titleText.setPosition(20, 25);
     window.draw(titleText);
     
-    // Área de nuevo post
-    if (isEnteringPost) {
-        inputBox.setSize(sf::Vector2f(400, 60));
-        inputBox.setPosition(50, 300);
-        window.draw(inputBox);
-        
-        inputText.setString(currentInputPost);
-        inputText.setPosition(60, 305);
-        window.draw(inputText);
-    }
-    
-    // Botones
-    window.draw(postButton);
-    window.draw(postButtonText);
+    // Botón de logout
+    logoutButton.setPosition(650, 20);
+    logoutButton.setSize(sf::Vector2f(120, 40));
+    styleButton(logoutButton, logoutButtonText, "Cerrar Sesion");
     window.draw(logoutButton);
     window.draw(logoutButtonText);
     
-    drawPostScreen();
-    drawFriendsList();
+    // Área de publicaciones
+    createCardBackground(20, 100, 440, 480);
+    window.draw(cardBackground);
+    
+    titleText.setString("Publicaciones");
+    titleText.setPosition(30, 110);
+    window.draw(titleText);
+    
+    // Área de entrada de nuevo post
+    if (isEnteringPost) {
+        sf::RectangleShape postInput;
+        postInput.setSize(sf::Vector2f(400, 60));
+        postInput.setPosition(40, 150);
+        postInput.setFillColor(INPUT_BACKGROUND);
+        postInput.setOutlineThickness(1);
+        postInput.setOutlineColor(sf::Color(100, 100, 100));
+        window.draw(postInput);
+        
+        inputText.setString(currentInputPost);
+        inputText.setPosition(50, 160);
+        inputText.setFillColor(TEXT_COLOR);
+        window.draw(inputText);
+    }
+    
+    // Botón de post
+    postButton.setPosition(40, 220);
+    postButton.setSize(sf::Vector2f(120, 40));
+    styleButton(postButton, postButtonText, "Publicar");
+    window.draw(postButton);
+    window.draw(postButtonText);
+    
+    // Lista de posts
+    float postsYPos = 280;
+    auto posts = socialNetwork.getUserPosts(currentUser);
+    for (const auto& post : posts) {
+        drawPostCard(post, postsYPos);
+    }
+    
+    // Área de amigos
+    createCardBackground(480, 100, 300, 480);
+    window.draw(cardBackground);
+    
+    titleText.setString("Amigos");
+    titleText.setPosition(490, 110);
+    window.draw(titleText);
+    
+    // Lista de amigos
+    float friendsYPos = 150;
+    auto friends = socialNetwork.getUserFriends(currentUser);
+    for (const auto& friend_name : friends) {
+        drawFriendCard(friend_name, friendsYPos);
+    }
     
     window.display();
 }
@@ -601,6 +864,69 @@ void GUI::drawFriendsList() {
         window.draw(inputText);
         yPos += 30;
     }
+}
+
+void GUI::styleButton(sf::RectangleShape& button, sf::Text& text, const std::string& buttonText) {
+    button.setFillColor(PRIMARY_COLOR);
+    button.setOutlineThickness(2);
+    button.setOutlineColor(sf::Color(100, 100, 100));
+    
+    text.setFont(font);
+    text.setString(buttonText);
+    text.setCharacterSize(16);
+    text.setFillColor(TEXT_COLOR);
+    
+    // Centrar texto
+    sf::FloatRect textBounds = text.getLocalBounds();
+    sf::FloatRect buttonBounds = button.getGlobalBounds();
+    text.setPosition(
+        buttonBounds.left + (buttonBounds.width - textBounds.width) / 2,
+        buttonBounds.top + (buttonBounds.height - textBounds.height) / 2
+    );
+}
+
+void GUI::createCardBackground(float x, float y, float width, float height) {
+    cardBackground.setSize(sf::Vector2f(width, height));
+    cardBackground.setPosition(x, y);
+    cardBackground.setFillColor(INPUT_BACKGROUND);
+    cardBackground.setOutlineThickness(1);
+    cardBackground.setOutlineColor(sf::Color(100, 100, 100));
+}
+
+void GUI::drawPostCard(const std::string& post, float& yPos) {
+    sf::RectangleShape postCard;
+    postCard.setSize(sf::Vector2f(380, 80));
+    postCard.setPosition(50, yPos);
+    postCard.setFillColor(INPUT_BACKGROUND);
+    postCard.setOutlineThickness(1);
+    postCard.setOutlineColor(sf::Color(100, 100, 100));
+    
+    window.draw(postCard);
+    
+    inputText.setString(post);
+    inputText.setPosition(60, yPos + 10);
+    inputText.setFillColor(TEXT_COLOR);
+    window.draw(inputText);
+    
+    yPos += 90; // Espacio entre posts
+}
+
+void GUI::drawFriendCard(const std::string& friendName, float& yPos) {
+    sf::RectangleShape friendCard;
+    friendCard.setSize(sf::Vector2f(200, 40));
+    friendCard.setPosition(500, yPos);
+    friendCard.setFillColor(INPUT_BACKGROUND);
+    friendCard.setOutlineThickness(1);
+    friendCard.setOutlineColor(sf::Color(100, 100, 100));
+    
+    window.draw(friendCard);
+    
+    inputText.setString(friendName);
+    inputText.setPosition(510, yPos + 10);
+    inputText.setFillColor(TEXT_COLOR);
+    window.draw(inputText);
+    
+    yPos += 50; // Espacio entre amigos
 }
 
 void GUI::run() {
