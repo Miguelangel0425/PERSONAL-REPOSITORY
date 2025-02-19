@@ -1,40 +1,30 @@
 #pragma once 
 #include <vector> 
 #include <string>
-
-using namespace std;
+#include <unordered_set>
 
 struct Function {
-    string name;
-    string returnType;
-    string parameters;
-    string body;
-    string complexity;
+    std::string name;
+    std::string returnType;
+    std::string parameters;
+    std::string body;
+    std::string complexity;
 };
 
 class FunctionExtractor {
-    public:
-    // Constructor
+public:
     FunctionExtractor();
-    
-    // Extraer funciones de un archivo
     std::vector<Function> extractFromFile(const std::string& filePath);
-    
-    // Guardar resultados en CSV
     bool saveToCSV(const std::vector<Function>& functions, const std::string& outputPath);
     
 private:
-    // Leer contenido completo de un archivo
     std::string readFile(const std::string& filePath);
-    
-    // Extraer funciones del código fuente
     std::vector<Function> extractFunctions(const std::string& sourceCode);
-    
-    // Analizar complejidad Big O de una función
     std::string analyzeComplexity(const std::string& code);
-    
-    // Extraer el cuerpo completo de una función con anidación de llaves balanceada
     std::string extractFunctionBody(const std::string& sourceCode, size_t startPos);
+    bool isValidSourceFile(const std::string& filePath);
+    bool fileExists(const std::string &filePath);
+    std::streamsize getFileSize(const std::string &filePath);
+    bool isBinaryFile(const std::string &filePath);
+    std::string analyzeBinaryFile(const std::string& filePath);
 };
-
-

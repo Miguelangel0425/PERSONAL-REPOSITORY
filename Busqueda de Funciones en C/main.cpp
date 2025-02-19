@@ -2,13 +2,13 @@
 #include <string>
 #include <iomanip>
 #include "FunctionExtractor.h"
-#include "ComplexityVisualizer.h"
+#include <chrono>
 
 void printUsage() {
-    std::cout << "Analizador de Complejidad de Funciones C" << std::endl;
+    std::cout << "Analizador de Complejidad de Funciones C++" << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Uso: ./analizador_complejidad <archivo_c>" << std::endl;
-    std::cout << "Ejemplo: ./analizador_complejidad ejemplo.c" << std::endl;
+    std::cout << "Uso: ./analizador_complejidad <archivo>" << std::endl;
+    std::cout << "Ejemplo: ./analizador_complejidad ejemplo.cpp" << std::endl;
 }
 
 void printFunctionSummary(const std::vector<Function>& functions) {
@@ -26,61 +26,54 @@ void printFunctionSummary(const std::vector<Function>& functions) {
 }
 
 int main(int argc, char* argv[]) {
-    // Verificar argumentos
+    std::string filePath;
+    
     if (argc < 2) {
         printUsage();
-        std::cout << "\nIntroduce la ruta del archivo C a analizar: ";
-        std::string filePath;
+        std::cout << "\nIntroduce la ruta del archivo a analizar: ";
         std::getline(std::cin, filePath);
         if (filePath.empty()) {
             std::cerr << "No se especificó ningún archivo. Saliendo..." << std::endl;
             return 1;
         }
+    } else {
+        filePath = argv[1];
     }
     
-    // Obtener ruta del archivo
-    std::string filePath = (argc >= 2) ? argv[1] : "";
     std::string csvPath = "funciones_extraidas.csv";
-    std::string pythonScript = "visualizar_complejidad.py";
-    std::string matlabScript = "visualizar_complejidad.m";
     
     try {
-        // Crear instancia del extractor
-        FunctionExtractor extractor;
+        std::cout << "=== Iniciando análisis ===" << std::endl;
+        auto startTime = std::chrono::high_resolution_clock::now();
         
-        // Extraer funciones
+        FunctionExtractor extractor;
         std::cout << "Analizando archivo: " << filePath << std::endl;
         std::vector<Function> functions = extractor.extractFromFile(filePath);
+        
+        auto endTime = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+        std::cout << "Tiempo de analisis: " << duration << " ms" << std::endl;
         
         if (functions.empty()) {
             std::cerr << "No se encontraron funciones en el archivo." << std::endl;
             return 1;
         }
         
-        // Mostrar resumen de funciones encontradas
         printFunctionSummary(functions);
         
-        // Guardar resultados en CSV
         if (extractor.saveToCSV(functions, csvPath)) {
             std::cout << "\nResultados guardados en: " << csvPath << std::endl;
+            std::cout << "\nPara visualizar los resultados, ejecute:" << std::endl;
+            std::cout << "python visualizar_complejidad.py " << csvPath << std::endl;
         } else {
             std::cerr << "Error al guardar resultados en CSV." << std::endl;
             return 1;
         }
         
-        // Generar scripts de visualización
-        ComplexityVisualizer visualizer;
-        visualizer.generatePythonScript(csvPath, pythonScript);
-        visualizer.generateMatlabScript(csvPath, matlabScript);
-        
-        // Mostrar instrucciones para visualización
-        std::cout << "\nPara visualizar los resultados:" << std::endl;
-        std::cout << "1. Ejecutar script Python: python " << pythonScript << std::endl;
-        std::cout << "2. Ejecutar script MATLAB: matlab -r \"run('" << matlabScript << "')\"" << std::endl;
-        
+        std::cout << "=== Análisis completado ===" << std::endl;
         return 0;
     } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Error fatal: " << e.what() << std::endl;
         return 1;
     }
 }
