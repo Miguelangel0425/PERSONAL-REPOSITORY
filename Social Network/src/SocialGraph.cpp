@@ -126,3 +126,21 @@ void SocialGraph::loadFromFile(const std::string& filename) { // Cargar de un ar
     }
     std::cout << "Carga exitosa desde " << filename << std::endl;
 }
+
+bool SocialGraph::areFriends(const std::string& user1, const std::string& user2) const {
+    // Check if both users exist
+    if (users.find(user1) == users.end() || users.find(user2) == users.end()) {
+        return false;
+    }
+    
+    // Get the friends list of user1
+    const std::vector<std::string>& friendsList = users.at(user1).getFriends();
+    
+    // Check if user2 is in the friends list of user1
+    return std::find(friendsList.begin(), friendsList.end(), user2) != friendsList.end();
+}
+
+bool SocialGraph::addFriend(const std::string& user1, const std::string& user2) {
+    // This can actually just call the existing addConnection method
+    return addConnection(user1, user2);
+}

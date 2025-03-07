@@ -9,18 +9,18 @@ class SocialGraph{
     unordered_map<string, User> users;
 
     public:
-    bool addUser(const string& username, const string& password);
-    bool addConnection(const string& user1, const string& user2);
-    bool addPost(const string& username, const string& post);
+    bool addUser(const std::string& username, const std::string& password);
+    bool addConnection(const std::string& user1, const std::string& user2);
+    bool addPost(const std::string& username, const std::string& post);
+    bool userExists(const std::string& username) const;
+    bool verifyPassword(const std::string& username, const std::string& password) const;
+    const std::string getUserHashedPassword(const std::string& username) const;
+    std::vector<std::string> getUserPosts(const std::string& username) const;
+    std::vector<std::string> getUserFriends(const std::string& username) const;
+    void saveToFile(const std::string& filename) const;
+    void loadFromFile(const std::string& filename);
+    
 
-    bool userExists(const string& username) const;
-    bool verifyPassword(const string& username , const string& password) const;
-
-    vector<string> getUserPosts(const string& username) const;
-    vector<string> getUserFriends(const string& username) const;
-    const string getUserHashedPassword(const string& username) const;
-
-    void saveToFile(const string& filename) const;
-    void loadFromFile(const string& filename);
-
+    bool areFriends(const std::string& user1, const std::string& user2) const;
+    bool addFriend(const std::string& user1, const std::string& user2);
 };
